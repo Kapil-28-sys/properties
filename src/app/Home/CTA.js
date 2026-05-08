@@ -30,121 +30,180 @@ export default function CTABanner() {
   const cards = [
     {
       title: "Verified Listings",
-      desc: "Trusted and premium properties across Rajasthan.",
-      icon: <BadgeCheck size={24} />,
+      desc: "Trusted premium properties across Rajasthan.",
+      icon: <BadgeCheck size={22} />,
     },
     {
       title: "Luxury Locations",
-      desc: "Explore modern homes in top growing cities.",
-      icon: <Building2 size={24} />,
+      desc: "Modern homes in high-growth premium cities.",
+      icon: <Building2 size={22} />,
     },
     {
       title: "Smooth Experience",
-      desc: "Fast communication and effortless process.",
-      icon: <Sparkles size={24} />,
+      desc: "Fast, transparent and effortless property journey.",
+      icon: <Sparkles size={22} />,
     },
   ];
 
   return (
-    <section className="relative overflow-hidden bg-[#f8f6f1] py-28 px-6">
+    <section className="relative overflow-hidden bg-[#f6f2ea] py-24 font-body">
 
-      {/* dots */}
-      <div className="absolute inset-0 opacity-[0.05] bg-[radial-gradient(#000_1px,transparent_1px)] [background-size:24px_24px]" />
+      {/* ✨ Fonts + Animations */}
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Jost:wght@300;400;500&display=swap');
 
-      {/* top glow */}
-      <div className="absolute left-1/2 top-0 h-[350px] w-[650px] -translate-x-1/2 rounded-full bg-[#b88a44]/10 blur-[140px]" />
+        .font-heading { font-family: 'Cormorant Garamond', serif; }
+        .font-body { font-family: 'Jost', sans-serif; }
 
-      {/* floating blur */}
-      <div className="absolute bottom-0 right-0 h-[220px] w-[220px] rounded-full bg-[#b88a44]/10 blur-[120px]" />
+        @keyframes fadeUp {
+          from { opacity: 0; transform: translateY(25px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-up { animation: fadeUp 0.8s ease forwards; }
+
+        .glass {
+          backdrop-filter: blur(14px);
+          background: rgba(255,255,255,0.75);
+        }
+
+        .card {
+          transition: all 0.4s ease;
+        }
+
+        .card:hover {
+          transform: translateY(-8px);
+          box-shadow: 0 25px 70px rgba(0,0,0,0.12);
+        }
+
+        .gold-line {
+          position: relative;
+          overflow: hidden;
+        }
+
+        .gold-line::after {
+          content: "";
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          width: 0%;
+          height: 3px;
+          background: #b88a44;
+          transition: 0.5s ease;
+        }
+
+        .gold-line:hover::after {
+          width: 100%;
+        }
+      `}</style>
+
+      {/* BACKGROUND */}
+      <div className="absolute inset-0 opacity-[0.06] bg-[radial-gradient(#000_1px,transparent_1px)] [background-size:26px_26px]" />
+
+      {/* GLOW */}
+      <div className="absolute top-[-120px] left-1/2 -translate-x-1/2 w-[650px] h-[650px] bg-[#b88a44]/10 blur-[140px]" />
 
       <div
         ref={ref}
-        className={`relative mx-auto max-w-6xl transition-all duration-1000 ${
-          show
-            ? "translate-y-0 opacity-100"
-            : "translate-y-12 opacity-0"
+        className={`relative mx-auto max-w-6xl px-5 transition-all duration-1000 ${
+          show ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
         }`}
       >
-        {/* main container */}
-        <div className="relative overflow-hidden rounded-[40px] border border-black/5 bg-white/70 backdrop-blur-xl shadow-[0_20px_80px_rgba(0,0,0,0.06)] p-8 md:p-14">
 
-          {/* subtle lines */}
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,transparent,rgba(184,138,68,0.05),transparent)]" />
+        {/* MAIN CONTAINER */}
+        <div className="glass rounded-[40px] border border-[#d9c3a0]/30 shadow-[0_20px_80px_rgba(0,0,0,0.06)] p-8 md:p-14">
 
-          {/* badge */}
-          <div className="flex justify-center">
-            <div className="group inline-flex items-center gap-2 rounded-full border border-[#b88a44]/20 bg-[#b88a44]/10 px-5 py-2 text-sm font-medium text-[#b88a44] transition-all duration-300 hover:scale-105">
-              <span className="h-2 w-2 rounded-full bg-[#b88a44] animate-pulse" />
+          {/* BADGE */}
+          <div className="flex justify-center fade-up">
+
+            <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full border border-[#b88a44]/20 bg-[#b88a44]/10 text-[#b88a44] text-sm font-medium">
+
+              <span className="w-2 h-2 rounded-full bg-[#b88a44] animate-pulse" />
+
               Rajasthan Property Hub
+
             </div>
+
           </div>
 
-          {/* heading */}
-          <div className="mx-auto mt-8 max-w-4xl text-center">
-            <h2 className="text-4xl font-semibold leading-tight tracking-tight text-[#111] md:text-6xl">
+          {/* HEADING */}
+          <div className="text-center mt-8 fade-up">
+
+            <h2 className="font-heading text-4xl md:text-6xl font-semibold text-[#1f1f1f] leading-tight">
+
               Discover Your
-              <span className="relative mx-3 inline-block text-[#b88a44]">
+              <span className="text-[#b88a44] mx-2 relative">
                 Dream Property
-                <div className="absolute -bottom-2 left-0 h-[10px] w-full rounded-full bg-[#b88a44]/15 blur-md" />
               </span>
               In Rajasthan
+
             </h2>
 
-            <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-[#666] md:text-lg">
+            <p className="mt-5 max-w-2xl mx-auto text-gray-600 text-base md:text-lg leading-7">
               Explore verified homes, luxury villas, apartments, and
-              investment properties with a premium and seamless experience.
+              investment properties with a seamless premium experience.
             </p>
+
           </div>
 
-          {/* cards */}
-          <div className="mt-16 grid gap-6 md:grid-cols-3">
+          {/* CARDS */}
+          <div className="mt-14 grid md:grid-cols-3 gap-6">
+
             {cards.map((item, i) => (
               <div
                 key={i}
-                className="group relative overflow-hidden rounded-[30px] border border-black/5 bg-white p-8 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(184,138,68,0.12)]"
+                className="card relative p-7 rounded-3xl bg-white/70 border border-[#d9c3a0]/20 shadow-sm"
               >
-                {/* hover glow */}
-                <div className="absolute inset-0 bg-gradient-to-br from-[#b88a44]/0 via-[#b88a44]/0 to-[#b88a44]/5 opacity-0 transition-all duration-500 group-hover:opacity-100" />
 
-                <div className="relative z-10">
-                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#b88a44]/10 text-[#b88a44] transition-all duration-300 group-hover:scale-110 group-hover:rotate-3">
-                    {item.icon}
-                  </div>
+                {/* ICON */}
+                <div className="w-12 h-12 rounded-2xl bg-[#b88a44]/10 text-[#b88a44] flex items-center justify-center transition group-hover:scale-110">
 
-                  <h3 className="mt-6 text-xl font-semibold text-[#111]">
-                    {item.title}
-                  </h3>
+                  {item.icon}
 
-                  <p className="mt-3 text-sm leading-relaxed text-[#666]">
-                    {item.desc}
-                  </p>
                 </div>
+
+                <h3 className="font-heading mt-5 text-xl font-semibold text-[#1f1f1f]">
+                  {item.title}
+                </h3>
+
+                <p className="mt-2 text-sm text-gray-600 leading-6">
+                  {item.desc}
+                </p>
+
               </div>
             ))}
+
           </div>
 
-          {/* buttons */}
-          <div className="mt-14 flex flex-wrap items-center justify-center gap-5">
+          {/* BUTTONS */}
+          <div className="mt-14 flex flex-wrap justify-center gap-4">
 
-            {/* primary */}
-            <button className="group relative overflow-hidden rounded-full bg-[#b88a44] px-8 py-4 text-sm font-medium text-white shadow-lg transition-all duration-300 hover:scale-[1.03] hover:shadow-[0_10px_30px_rgba(184,138,68,0.35)]">
-              <div className="absolute inset-0 translate-y-full bg-gradient-to-r from-[#d8a85b] to-[#b88a44] transition-all duration-500 group-hover:translate-y-0" />
+            {/* PRIMARY */}
+            <button className="group relative overflow-hidden rounded-full bg-[#b88a44] px-8 py-3.5 text-white text-sm font-medium shadow-lg hover:scale-[1.03] transition">
 
-              <div className="relative z-10 flex items-center gap-2">
+              <div className="absolute inset-0 bg-gradient-to-r from-[#d8a85b] to-[#b88a44] translate-y-full group-hover:translate-y-0 transition" />
+
+              <span className="relative flex items-center gap-2">
+
                 Explore Properties
                 <ArrowUpRight
-                  size={17}
-                  className="transition-all duration-300 group-hover:rotate-45"
+                  size={16}
+                  className="group-hover:rotate-45 transition"
                 />
-              </div>
+
+              </span>
+
             </button>
 
-            {/* secondary */}
-            <button className="group rounded-full border border-black/10 bg-white px-8 py-4 text-sm font-medium text-[#111] transition-all duration-300 hover:-translate-y-1 hover:border-[#b88a44]/30 hover:bg-[#111] hover:text-white">
+            {/* SECONDARY */}
+            <button className="gold-line rounded-full border border-black/10 bg-white px-8 py-3.5 text-sm font-medium text-[#1f1f1f] hover:bg-[#1f1f1f] hover:text-white transition">
+
               Contact Agent
+
             </button>
 
           </div>
+
         </div>
       </div>
     </section>

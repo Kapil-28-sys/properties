@@ -55,19 +55,15 @@ const testimonials = [
 export default function Testimonials() {
   const [index, setIndex] = useState(0);
 
-  const next = () => {
+  const next = () =>
     setIndex((prev) => (prev + 1) % testimonials.length);
-  };
 
-  const prev = () => {
-    setIndex(
-      (prev) => (prev - 1 + testimonials.length) % testimonials.length
-    );
-  };
+  const prev = () =>
+    setIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
 
   useEffect(() => {
-    const interval = setInterval(next, 4500);
-    return () => clearInterval(interval);
+    const t = setInterval(next, 5000);
+    return () => clearInterval(t);
   }, []);
 
   const getPosition = (i) => {
@@ -81,12 +77,57 @@ export default function Testimonials() {
   };
 
   return (
-    <section className="py-24 bg-[#f7f7f7] overflow-hidden">
-      <h2 className="text-4xl font-bold text-center mb-14 text-gray-800">
-        What People Say
-      </h2>
+    <section className="relative py-24 bg-[#f6f2ea] overflow-hidden font-body">
 
-      <div className="relative max-w-6xl mx-auto flex items-center justify-center h-[500px]">
+      {/* ✨ Fonts + Animations */}
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Jost:wght@300;400;500&display=swap');
+
+        .font-heading { font-family: 'Cormorant Garamond', serif; }
+        .font-body { font-family: 'Jost', sans-serif; }
+
+        @keyframes fadeUp {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-up { animation: fadeUp 0.8s ease forwards; }
+
+        .card {
+          transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .glass {
+          backdrop-filter: blur(10px);
+          background: rgba(255,255,255,0.85);
+        }
+
+        .btn {
+          transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+          transform: scale(1.08);
+          background: #b88a44;
+          color: white;
+        }
+      `}</style>
+
+      {/* HEADER */}
+      <div className="text-center mb-14 fade-up">
+
+        <h2 className="font-heading text-5xl lg:text-6xl font-semibold text-[#1f1f1f]">
+          What People Say
+        </h2>
+
+        <p className="mt-3 text-gray-600">
+          Real experiences from our happy clients
+        </p>
+
+      </div>
+
+      {/* CAROUSEL */}
+      <div className="relative max-w-6xl mx-auto flex items-center justify-center h-[520px]">
 
         {testimonials.map((t, i) => {
           const pos = getPosition(i);
@@ -95,69 +136,82 @@ export default function Testimonials() {
             <div
               key={i}
               className={`
-                absolute transition-all duration-700 ease-in-out
-                w-[360px] bg-white rounded-2xl shadow-lg overflow-hidden
-                ${
-                  pos === "center"
-                    ? "scale-110 z-30 opacity-100"
-                    : pos === "left"
-                    ? "-translate-x-[420px] scale-90 opacity-40 blur-[1px]"
-                    : pos === "right"
-                    ? "translate-x-[420px] scale-90 opacity-40 blur-[1px]"
-                    : "opacity-0 scale-75"
+                absolute card w-[370px] rounded-3xl overflow-hidden shadow-xl border border-[#d9c3a0]/25
+                ${pos === "center"
+                  ? "scale-110 z-30 opacity-100"
+                  : pos === "left"
+                  ? "-translate-x-[420px] scale-90 opacity-40"
+                  : pos === "right"
+                  ? "translate-x-[420px] scale-90 opacity-40"
+                  : "opacity-0 scale-75"
                 }
               `}
             >
+
               {/* IMAGE */}
-              <img
-                src={t.img}
-                className="w-full h-52 object-cover"
-                alt={t.name}
-              />
+              <div className="relative h-52 overflow-hidden">
 
-              <div className="p-5">
-                <p className="text-gray-600 italic">“{t.review}”</p>
+                <img
+                  src={t.img}
+                  className="w-full h-full object-cover scale-105"
+                  alt={t.name}
+                />
 
-                <div className="mt-3 inline-block px-3 py-1 text-sm bg-[#b88a44] text-white rounded-full">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
+
+                {/* PROPERTY TAG */}
+                <div className="absolute bottom-3 left-3 text-xs px-3 py-1 rounded-full bg-[#b88a44] text-white shadow">
                   {t.property}
                 </div>
 
+              </div>
+
+              {/* CONTENT */}
+              <div className="p-5 glass">
+
+                <p className="text-gray-700 italic leading-6">
+                  “{t.review}”
+                </p>
+
+                {/* USER */}
                 <div className="mt-5 flex items-center gap-3">
+
                   <img
                     src={t.avatar}
                     className="w-11 h-11 rounded-full border-2 border-[#b88a44]"
                   />
 
                   <div>
-                    <h4 className="font-semibold text-gray-800">
+                    <h4 className="font-heading text-lg font-semibold text-[#1f1f1f]">
                       {t.name}
                     </h4>
-                    <p className="text-sm text-gray-500">{t.role}</p>
+                    <p className="text-sm text-gray-500">
+                      {t.role}
+                    </p>
                   </div>
+
                 </div>
+
               </div>
+
             </div>
           );
         })}
 
         {/* CONTROLS */}
-        <button
-          onClick={prev}
-          className="absolute left-4 bg-white shadow px-4 py-2 rounded-full"
-        >
+        <button onClick={prev} className="btn absolute left-4 w-11 h-11 rounded-full bg-white shadow-md flex items-center justify-center">
           ❮
         </button>
 
-        <button
-          onClick={next}
-          className="absolute right-4 bg-white shadow px-4 py-2 rounded-full"
-        >
+        <button onClick={next} className="btn absolute right-4 w-11 h-11 rounded-full bg-white shadow-md flex items-center justify-center">
           ❯
         </button>
+
       </div>
 
       {/* DOTS */}
       <div className="flex justify-center gap-2 mt-6">
+
         {testimonials.map((_, i) => (
           <div
             key={i}
@@ -166,7 +220,9 @@ export default function Testimonials() {
             }`}
           />
         ))}
+
       </div>
+
     </section>
   );
 }

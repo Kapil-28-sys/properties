@@ -11,83 +11,123 @@ export default function WhyChooseUs() {
     {
       icon: <Building2 size={20} />,
       title: "Prime Properties",
-      desc: "Luxury homes in premium locations.",
+      desc: "Luxury homes in premium curated locations.",
     },
     {
       icon: <TrendingUp size={20} />,
       title: "Investment Growth",
-      desc: "High-return properties with appreciation.",
+      desc: "High-return assets with strong appreciation potential.",
     },
     {
       icon: <ShieldCheck size={20} />,
       title: "Verified Deals",
-      desc: "Trusted & transparent real estate experience.",
+      desc: "Secure, transparent and trusted real estate experience.",
     },
   ];
 
   return (
-    <section className="relative overflow-hidden bg-[#f6f2ea] py-14 lg:py-16 border-y border-[#d9c3a0]/30">
+    <section className="relative overflow-hidden bg-[#f6f2ea] py-16 border-y border-[#d9c3a0]/30">
 
-      {/* PREMIUM SQUARE GRID BG */}
+      {/* ✨ Fonts + Animations */}
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap');
+
+        .font-heading { font-family: 'Cormorant Garamond', serif; }
+        .font-body { font-family: 'Jost', sans-serif; }
+
+        @keyframes fadeUp {
+          from { opacity: 0; transform: translateY(25px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes softFloat {
+          0%,100% { transform: translateY(0px); }
+          50% { transform: translateY(-6px); }
+        }
+
+        .fade-up { animation: fadeUp 0.8s ease forwards; }
+        .float { animation: softFloat 5s ease-in-out infinite; }
+
+        .gold-hover {
+          transition: all 0.4s ease;
+        }
+        .gold-hover:hover {
+          background: #b88a44;
+          color: white;
+        }
+
+        .shine {
+          position: relative;
+          overflow: hidden;
+        }
+        .shine::after {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 60%;
+          height: 100%;
+          background: linear-gradient(120deg, transparent, rgba(255,255,255,0.4), transparent);
+          transition: 0.6s;
+        }
+        .shine:hover::after {
+          left: 120%;
+        }
+      `}</style>
+
+      {/* BACKGROUND GRID */}
       <div
-        className="absolute inset-0 opacity-[0.14]"
+        className="absolute inset-0 opacity-[0.12]"
         style={{
           backgroundImage: `
-            linear-gradient(rgba(184,138,68,0.18) 1.5px, transparent 1.5px),
-            linear-gradient(90deg, rgba(184,138,68,0.18) 1.5px, transparent 1.5px)
+            linear-gradient(rgba(184,138,68,0.18) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(184,138,68,0.18) 1px, transparent 1px)
           `,
-          backgroundSize: "58px 58px",
-          maskImage:
-            "radial-gradient(circle at center, black 65%, transparent 100%)",
-          WebkitMaskImage:
-            "radial-gradient(circle at center, black 65%, transparent 100%)",
+          backgroundSize: "60px 60px",
+          maskImage: "radial-gradient(circle at center, black 60%, transparent 100%)",
         }}
       />
 
-      {/* EXTRA GLOW */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(184,138,68,0.10),transparent_35%)]"></div>
+      {/* GLOW */}
+      <div className="absolute top-[-120px] right-[-100px] w-[400px] h-[400px] bg-[#b88a44]/10 blur-[120px]" />
 
-      {/* BIG BLUR */}
-      <div className="absolute top-[-140px] right-[-120px] w-[380px] h-[380px] rounded-full bg-[#b88a44]/10 blur-3xl" />
+      <div className="relative max-w-6xl mx-auto px-5 lg:px-8 font-body">
 
-      <div className="relative max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
-
-        {/* TOP */}
-        <div className="grid lg:grid-cols-[1fr_0.9fr] gap-10 lg:gap-14 items-center">
+        {/* TOP GRID */}
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
 
           {/* LEFT */}
-          <div>
+          <div className="fade-up">
 
             {/* BADGE */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/90 backdrop-blur-md border border-[#d9c3a0]/30 shadow-sm">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/70 backdrop-blur border border-[#d9c3a0]/40">
 
               <Sparkles size={14} className="text-[#b88a44]" />
 
-              <span className="text-[10px] uppercase tracking-[0.24em] font-semibold text-[#b88a44]">
+              <span className="text-[11px] tracking-[0.25em] uppercase text-[#b88a44] font-medium">
                 Why Choose Us
               </span>
 
             </div>
 
             {/* HEADING */}
-            <h2 className="mt-5 text-[2.5rem] sm:text-5xl lg:text-[64px] font-semibold leading-[0.95] tracking-[-2px] text-[#1f1f1f]">
+            <h2 className="font-heading mt-5 text-5xl lg:text-6xl leading-[1.05] text-[#1f1f1f] font-semibold">
 
               Luxury Living
-
               <span className="block text-[#b88a44]">
-                Reimagined.
+                Reimagined
               </span>
 
             </h2>
 
             {/* DESC */}
-            <p className="mt-5 text-[15px] sm:text-base leading-7 text-gray-600 max-w-xl">
-              Premium real estate solutions designed for modern lifestyles,
-              investment growth, and exceptional living experiences.
+            <p className="mt-5 text-gray-600 leading-7 max-w-lg text-[15px]">
+              Premium real estate crafted for modern lifestyles, long-term value,
+              and refined living experiences.
             </p>
 
             {/* STATS */}
-            <div className="flex flex-wrap gap-3 mt-7">
+            <div className="flex flex-wrap gap-3 mt-8">
 
               {[
                 ["10K+", "Clients"],
@@ -96,78 +136,63 @@ export default function WhyChooseUs() {
               ].map((item, i) => (
                 <div
                   key={i}
-                  className="bg-white/85 backdrop-blur-md border border-[#d9c3a0]/20 rounded-[22px] px-5 py-4 shadow-md min-w-[120px]"
+                  className="bg-white/70 backdrop-blur border border-[#d9c3a0]/25 rounded-2xl px-5 py-4 min-w-[120px] shadow-sm hover:shadow-md transition"
                 >
-
-                  <h3 className="text-2xl sm:text-3xl font-bold text-[#1f1f1f] leading-none">
+                  <h3 className="text-2xl font-semibold text-[#1f1f1f] font-heading">
                     {item[0]}
                   </h3>
-
-                  <p className="text-gray-500 mt-1 text-xs sm:text-sm">
+                  <p className="text-xs text-gray-500 mt-1">
                     {item[1]}
                   </p>
-
                 </div>
               ))}
 
             </div>
 
             {/* BUTTON */}
-            <button className="group mt-7 inline-flex items-center gap-2.5 px-6 py-3.5 rounded-full bg-[#1f1f1f] text-white text-sm font-medium hover:bg-[#b88a44] duration-300 shadow-xl">
+            <button className="shine gold-hover mt-8 inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#1f1f1f] text-white text-sm font-medium shadow-lg">
 
               Explore Properties
-
-              <ArrowUpRight
-                size={17}
-                className="group-hover:rotate-45 duration-300"
-              />
+              <ArrowUpRight size={16} className="transition group-hover:rotate-45" />
 
             </button>
 
           </div>
 
-          {/* RIGHT */}
-          <div className="relative">
+          {/* RIGHT IMAGE */}
+          <div className="relative float">
 
-            {/* IMAGE */}
-            <div className="relative h-[420px] sm:h-[500px] lg:h-[520px] overflow-hidden rounded-[32px] shadow-[0_20px_70px_rgba(0,0,0,0.12)] border border-white/30">
+            <div className="h-[480px] rounded-[30px] overflow-hidden shadow-2xl border border-white/40">
 
               <img
                 src="https://images.unsplash.com/photo-1600585154526-990dced4db0d"
+                className="w-full h-full object-cover scale-[1.03] hover:scale-110 transition duration-700"
                 alt="Luxury Property"
-                className="w-full h-full object-cover"
               />
 
-              {/* OVERLAY */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/10 to-transparent"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
 
               {/* FLOAT CARD */}
-              <div className="absolute left-4 right-4 bottom-4">
+              <div className="absolute bottom-5 left-5 right-5">
 
-                <div className="bg-white/88 backdrop-blur-xl rounded-[26px] p-4 sm:p-5 border border-white/50 shadow-2xl">
+                <div className="bg-white/90 backdrop-blur-xl rounded-2xl p-5 border border-white/40">
 
-                  <div className="flex items-center justify-between gap-4">
+                  <div className="flex justify-between items-center">
 
                     <div>
-
-                      <p className="text-[10px] uppercase tracking-[0.22em] text-gray-500">
-                        Trusted Experience
-                      </p>
-
-                      <h3 className="mt-1 text-3xl font-semibold text-[#1f1f1f]">
-                        98%
-                      </h3>
-
-                      <p className="text-sm text-gray-600 mt-1">
+                      <p className="text-[10px] uppercase tracking-[0.2em] text-gray-500">
                         Client Satisfaction
                       </p>
-
+                      <h3 className="text-3xl font-semibold font-heading text-[#1f1f1f]">
+                        98%
+                      </h3>
+                      <p className="text-sm text-gray-600">
+                        Trusted Experience
+                      </p>
                     </div>
 
-                    <div className="w-14 h-14 rounded-2xl bg-[#b88a44] flex items-center justify-center text-white shadow-lg shrink-0">
-
-                      <ShieldCheck size={24} />
-
+                    <div className="w-12 h-12 rounded-xl bg-[#b88a44] flex items-center justify-center text-white">
+                      <ShieldCheck size={20} />
                     </div>
 
                   </div>
@@ -178,63 +203,32 @@ export default function WhyChooseUs() {
 
             </div>
 
-            {/* FLOATING SMALL CARD */}
-            <div className="absolute -top-4 -left-4 hidden lg:block">
-
-              <div className="bg-white/90 backdrop-blur-md border border-[#d9c3a0]/20 rounded-[24px] px-5 py-4 shadow-xl">
-
-                <p className="text-[10px] uppercase tracking-[0.2em] text-gray-500">
-                  Excellence
-                </p>
-
-                <h3 className="mt-1 text-3xl font-bold text-[#b88a44]">
-                  12+
-                </h3>
-
-                <p className="text-sm text-gray-600 mt-1">
-                  Years Experience
-                </p>
-
-              </div>
-
-            </div>
-
           </div>
 
         </div>
 
         {/* FEATURE CARDS */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-10">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-12">
 
-          {cards.map((item, index) => (
+          {cards.map((item, i) => (
             <div
-              key={index}
-              className="group relative overflow-hidden rounded-[28px] bg-white/85 backdrop-blur-md border border-[#d9c3a0]/20 p-5 sm:p-6 shadow-md hover:-translate-y-1.5 hover:shadow-2xl duration-300"
+              key={i}
+              className="group relative p-6 rounded-3xl bg-white/70 backdrop-blur border border-[#d9c3a0]/25 shadow-sm hover:-translate-y-1 hover:shadow-xl transition duration-300"
             >
 
-              {/* HOVER EFFECT */}
-              <div className="absolute inset-0 bg-gradient-to-br from-[#b88a44]/8 to-transparent opacity-0 group-hover:opacity-100 duration-300"></div>
+              <div className="w-11 h-11 rounded-xl bg-[#b88a44]/10 text-[#b88a44] flex items-center justify-center group-hover:bg-[#b88a44] group-hover:text-white transition">
 
-              <div className="relative">
-
-                {/* ICON */}
-                <div className="w-12 h-12 rounded-2xl bg-[#b88a44]/10 text-[#b88a44] flex items-center justify-center group-hover:bg-[#b88a44] group-hover:text-white duration-300 shadow-sm">
-
-                  {item.icon}
-
-                </div>
-
-                {/* TITLE */}
-                <h3 className="mt-4 text-xl font-semibold text-[#1f1f1f]">
-                  {item.title}
-                </h3>
-
-                {/* DESC */}
-                <p className="mt-2 text-sm leading-6 text-gray-600">
-                  {item.desc}
-                </p>
+                {item.icon}
 
               </div>
+
+              <h3 className="mt-4 text-lg font-semibold text-[#1f1f1f] font-heading">
+                {item.title}
+              </h3>
+
+              <p className="mt-2 text-sm text-gray-600 leading-6">
+                {item.desc}
+              </p>
 
             </div>
           ))}

@@ -2,7 +2,6 @@
 
 import {
   ChevronRight,
-  ArrowUpRight,
   Globe,
   Mail,
   Phone,
@@ -10,191 +9,159 @@ import {
 
 export default function Footer() {
   return (
-    <footer className="relative overflow-hidden bg-[#0b0b0b] border-t border-white/[0.05]">
+    <footer className="relative overflow-hidden bg-[#0b0b0b] text-white font-body">
 
-      {/* Top Premium Glow */}
-      <div className="absolute top-[-280px] left-1/2 -translate-x-1/2 w-[1000px] h-[550px] bg-[#b88a44]/15 blur-[180px] rounded-full" />
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Jost:wght@300;400;500&display=swap');
 
-      {/* Bottom Glow */}
-      <div className="absolute bottom-[-180px] right-[-120px] w-[450px] h-[450px] bg-[#b88a44]/10 blur-[140px] rounded-full" />
+        .font-heading { font-family: 'Cormorant Garamond', serif; }
+        .font-body { font-family: 'Jost', sans-serif; }
 
-      {/* Grid Pattern */}
-      <div className="absolute inset-0 opacity-[0.04] bg-[radial-gradient(circle,#fff_1px,transparent_1px)] bg-[size:26px_26px]" />
+        @keyframes fadeUp {
+          from { opacity: 0; transform: translateY(30px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
 
-      {/* Gradient Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/40" />
+        .fade-up { animation: fadeUp 0.9s ease forwards; }
 
-      <div className="relative z-10 max-w-[1450px] mx-auto px-6 sm:px-10 lg:px-14 pt-24">
+        /* LINKS → WHITE ON HOVER */
+        .link-hover {
+          transition: all 0.3s ease;
+        }
 
-        {/* Main Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1fr] gap-16 pb-24">
+        .link-hover:hover {
+          color: #ffffff;
+          transform: translateX(4px);
+        }
 
-          {/* Brand Side */}
-          <div className="animate-fadeUp">
+        /* UNDERLINE GOLD STAYS */
+        .underline-grow {
+          position: relative;
+        }
 
-            {/* Logo */}
-            <div className="relative inline-block">
-              <h2 className="text-[60px] leading-none font-semibold tracking-[-4px] text-white relative z-10">
-                LuxeEstate
-              </h2>
+        .underline-grow::after {
+          content: "";
+          position: absolute;
+          left: 0;
+          bottom: -4px;
+          width: 0%;
+          height: 1px;
+          background: #b88a44;
+          transition: 0.4s ease;
+        }
 
-              <div className="absolute -bottom-2 left-1 w-[120px] h-[10px] bg-[#b88a44]/30 blur-xl rounded-full"></div>
-            </div>
+        .underline-grow:hover::after {
+          width: 50%;
+        }
+      `}</style>
 
-            {/* Line */}
-            <div className="mt-7 h-[1px] w-32 bg-gradient-to-r from-[#b88a44] via-[#b88a44]/50 to-transparent"></div>
+      {/* GLOW */}
+      <div className="absolute top-[-200px] left-1/2 -translate-x-1/2 w-[900px] h-[500px] bg-[#b88a44]/10 blur-[160px] rounded-full" />
+      <div className="absolute bottom-[-180px] right-[-100px] w-[450px] h-[450px] bg-[#b88a44]/10 blur-[120px] rounded-full" />
 
-            {/* Description */}
-            <p className="mt-8 text-[15px] leading-8 text-gray-400 max-w-md">
-              Experience refined living through handpicked luxury homes,
-              iconic architecture, and world-class investment opportunities.
+      <div className="relative max-w-7xl mx-auto px-6 lg:px-14 pt-24 pb-10">
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1fr] gap-16">
+
+          {/* BRAND */}
+          <div className="fade-up">
+
+            <h2 className="font-heading text-5xl lg:text-6xl font-semibold tracking-[-2px]">
+              LuxeEstate
+            </h2>
+
+            <div className="w-24 h-[2px] bg-[#b88a44]/70 mt-6" />
+
+            <p className="mt-6 text-gray-400 leading-7 max-w-md text-sm">
+              Experience refined living through curated luxury homes,
+              premium architecture, and high-value investments.
             </p>
 
-           
+            {/* SOCIAL ICONS */}
+            <div className="flex gap-4 mt-10">
 
-            {/* Social */}
-            <div className="flex items-center gap-4 mt-12">
-
-              {[
-                { icon: Globe },
-                { icon: Mail },
-                { icon: Phone },
-              ].map((item, i) => {
-                const Icon = item.icon;
-
-                return (
-                  <button
-                    key={i}
-                    className="group relative w-14 h-14 rounded-2xl border border-white/[0.08] bg-white/[0.03] overflow-hidden transition-all duration-500 hover:-translate-y-2 hover:border-[#b88a44]/40 hover:shadow-[0_15px_40px_rgba(184,138,68,0.15)]"
-                  >
-
-                    {/* Hover Background */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-[#b88a44] to-[#d8a85b] opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
-
-                    {/* Shine Effect */}
-                    <div className="absolute top-0 left-[-120%] w-[80%] h-full bg-white/20 skew-x-12 group-hover:left-[140%] transition-all duration-700"></div>
-
-                    <div className="relative z-10 flex items-center justify-center h-full">
-                      <Icon
-                        size={18}
-                        className="text-gray-300 group-hover:text-white transition-all duration-300 group-hover:scale-110"
-                      />
-                    </div>
-
-                  </button>
-                );
-              })}
+              {[Globe, Mail, Phone].map((Icon, i) => (
+                <button
+                  key={i}
+                  className="group w-12 h-12 rounded-xl border border-white/10 bg-white/5 flex items-center justify-center transition hover:bg-white"
+                >
+                  <Icon
+                    size={18}
+                    className="text-gray-400 group-hover:text-black transition"
+                  />
+                </button>
+              ))}
 
             </div>
 
           </div>
 
-          {/* Footer Links */}
+          {/* LINKS */}
           {[
             {
               title: "Company",
-              links: [
-                "About Us",
-                "Properties",
-                "Luxury Villas",
-                "Agents",
-                "Contact",
-              ],
+              links: ["About Us", "Properties", "Luxury Villas", "Agents", "Contact"],
             },
             {
               title: "Locations",
-              links: [
-                "Dubai Marina",
-                "Palm Jumeirah",
-                "Singapore",
-                "New York",
-                "London City",
-              ],
+              links: ["Jaipur", "Udaipur", "Jodhpur", "Jaisalmer", "Ajmer"],
             },
             {
               title: "Services",
-              links: [
-                "Buy Property",
-                "Sell Property",
-                "Luxury Rentals",
-                "Investment Plans",
-                "Consultation",
-              ],
+              links: ["Buy Property", "Sell Property", "Rentals", "Investment", "Consulting"],
             },
           ].map((section, i) => (
-            <div key={i} className="animate-fadeUp">
+            <div key={i} className="fade-up">
 
-              <h3 className="text-white text-[24px] font-medium tracking-tight relative inline-block">
-
+              <h3 className="font-heading text-xl font-semibold mb-6">
                 {section.title}
-
-                <span className="absolute -bottom-2 left-0 w-0 h-[2px] bg-[#b88a44] transition-all duration-500 group-hover:w-full"></span>
-
               </h3>
 
-              <div className="mt-9 flex flex-col gap-5">
+              <ul className="space-y-4">
 
                 {section.links.map((item, idx) => (
-                  <a
-                    key={idx}
-                    href="#"
-                    className="group flex items-center gap-3 text-gray-500 hover:text-white transition-all duration-300 w-fit"
-                  >
+                  <li key={idx}>
 
-                    {/* Icon */}
-                    <div className="w-5 overflow-hidden flex items-center">
+                    <a
+                      href="#"
+                      className="group flex items-center gap-2 text-gray-400 link-hover underline-grow text-sm"
+                    >
 
                       <ChevronRight
-                        size={15}
-                        className="text-[#b88a44] opacity-0 -translate-x-3 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300"
+                        size={14}
+                        className="text-[#b88a44] opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition"
                       />
 
-                    </div>
+                      {item}
 
-                    {/* Text */}
-                    <span className="relative">
+                    </a>
 
-                      <span className="group-hover:translate-x-1 inline-block transition-all duration-300">
-                        {item}
-                      </span>
-
-                      <span className="absolute left-0 -bottom-1 w-0 h-[1px] bg-[#b88a44] group-hover:w-full transition-all duration-500"></span>
-
-                    </span>
-
-                  </a>
+                  </li>
                 ))}
 
-              </div>
+              </ul>
 
             </div>
           ))}
 
         </div>
 
-        {/* Bottom */}
-        <div className="border-t border-white/[0.06] py-8 flex flex-col md:flex-row items-center justify-between gap-5">
+        {/* BOTTOM */}
+        <div className="mt-20 pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-5">
 
-          <p className="text-gray-500 text-sm tracking-wide">
-            © 2026 LuxeEstate. Crafted with elegance & modern luxury.
+          <p className="text-gray-500 text-xs">
+            © 2026 LuxeEstate. Crafted with modern luxury.
           </p>
 
-          <div className="flex items-center gap-8 flex-wrap justify-center">
+          <div className="flex gap-6">
 
-            {[
-              "Privacy Policy",
-              "Terms & Conditions",
-              "Sitemap",
-            ].map((item, i) => (
+            {["Privacy Policy", "Terms", "Sitemap"].map((item, i) => (
               <a
                 key={i}
                 href="#"
-                className="group relative text-sm text-gray-500 hover:text-[#d6a85f] transition-all duration-300"
+                className="text-gray-500 text-xs transition hover:text-white underline-grow"
               >
                 {item}
-
-                <span className="absolute left-0 -bottom-1 w-0 h-[1px] bg-[#d6a85f] group-hover:w-full transition-all duration-500"></span>
-
               </a>
             ))}
 
@@ -203,25 +170,6 @@ export default function Footer() {
         </div>
 
       </div>
-
-      {/* Animation */}
-      <style jsx>{`
-        .animate-fadeUp {
-          animation: fadeUp 1s ease forwards;
-        }
-
-        @keyframes fadeUp {
-          0% {
-            opacity: 0;
-            transform: translateY(35px);
-          }
-          100% {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-      `}</style>
-
     </footer>
   );
 }

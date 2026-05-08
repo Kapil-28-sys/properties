@@ -9,115 +9,113 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 40) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-      }
-    };
+    const handleScroll = () => setScrolled(window.scrollY > 40);
 
     window.addEventListener("scroll", handleScroll);
-
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const navLinks = [
     { name: "Home", href: "/" },
-    { name: "About", href: "/about" },
+    { name: "About", href: "/About" },
     { name: "Properties", href: "/properties" },
-    { name: "Services", href: "/services" },
-    { name: "Contact", href: "/contact" },
+    { name: "Services", href: "/Services" },
+    { name: "Contact", href: "/Contact" },
   ];
 
   return (
     <header
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${
         scrolled
-          ? "bg-black/70 backdrop-blur-2xl border-b border-white/10 shadow-[0_10px_40px_rgba(0,0,0,0.45)]"
-          : "bg-transparent"
+          ? "bg-white/90 backdrop-blur-xl shadow-md border-b border-black/5"
+          : "bg-white/70 backdrop-blur-md"
       }`}
     >
-      <nav className="w-full px-4 sm:px-6 lg:px-10">
-        <div className="h-[90px] flex items-center justify-between">
+      <nav className="w-full px-5 sm:px-6 lg:px-10">
+        <div className="h-[85px] flex items-center justify-between">
 
-          {/* Logo */}
+          {/* LOGO */}
           <Link href="/" className="flex items-center gap-4">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#d6a55b] to-[#8d6330] flex items-center justify-center text-black font-bold text-xl shadow-lg">
+
+            <div className="w-11 h-11 rounded-2xl bg-[#b88a44] flex items-center justify-center text-white font-bold shadow-md">
               E
             </div>
 
             <div className="flex flex-col leading-tight">
-              <span className="text-white text-xl font-semibold tracking-wide">
+              <span className="text-black text-xl font-semibold tracking-wide">
                 Estate Prime
               </span>
-
-              <span className="text-[11px] uppercase tracking-[0.3em] text-gray-400">
+              <span className="text-[10px] uppercase tracking-[0.25em] text-gray-500">
                 Luxury Real Estate
               </span>
             </div>
+
           </Link>
 
-          {/* Desktop Nav */}
-          <div className="hidden lg:flex items-center gap-12">
+          {/* DESKTOP NAV */}
+          <div className="hidden lg:flex items-center gap-10">
+
             {navLinks.map((link) => (
               <Link
                 key={link.name}
                 href={link.href}
-                className="relative text-[14px] uppercase tracking-[0.2em] text-gray-300 hover:text-white transition duration-300 group"
+                className="group relative text-[13px] uppercase tracking-[0.18em] text-gray-700 hover:text-black transition duration-300"
               >
                 {link.name}
 
-                <span className="absolute left-0 -bottom-2 h-[2px] w-0 bg-[#d6a55b] transition-all duration-300 group-hover:w-full"></span>
+                {/* underline (short + centered) */}
+                <span className="absolute left-1/2 -translate-x-1/2 -bottom-2 h-[1px] w-0 bg-[#b88a44] group-hover:w-[55%] transition-all duration-300"></span>
+
               </Link>
             ))}
+
           </div>
 
-          {/* Desktop CTA */}
+          {/* CTA */}
           <div className="hidden lg:flex items-center gap-4">
 
-            <button className="px-6 py-3 rounded-full border border-white/10 bg-white/5 backdrop-blur-md text-white hover:bg-white/10 transition duration-300">
+            <button className="px-6 py-2.5 rounded-full bg-[#b88a44] text-white text-sm font-medium hover:bg-black transition duration-300 shadow-sm">
               Sign In
             </button>
 
-             
-
           </div>
 
-          {/* Mobile Toggle */}
+          {/* MOBILE */}
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="lg:hidden text-white"
+            className="lg:hidden text-black"
           >
-            {mobileOpen ? <X size={28} /> : <Menu size={28} />}
+            {mobileOpen ? <X size={26} /> : <Menu size={26} />}
           </button>
+
         </div>
 
-        {/* Mobile Menu */}
+        {/* MOBILE MENU */}
         <div
           className={`lg:hidden overflow-hidden transition-all duration-500 ${
-            mobileOpen
-              ? "max-h-[500px] opacity-100 pb-6"
-              : "max-h-0 opacity-0"
+            mobileOpen ? "max-h-[500px] opacity-100 pb-6" : "max-h-0 opacity-0"
           }`}
         >
-          <div className="mt-2 rounded-3xl border border-white/10 bg-black/80 backdrop-blur-2xl p-6 flex flex-col gap-5">
+          <div className="mt-2 rounded-3xl border border-black/10 bg-white p-6 flex flex-col gap-5 shadow-lg">
 
             {navLinks.map((link) => (
               <Link
                 key={link.name}
                 href={link.href}
                 onClick={() => setMobileOpen(false)}
-                className="text-gray-300 hover:text-white transition text-lg"
+                className="text-gray-700 hover:text-black text-lg transition"
               >
                 {link.name}
               </Link>
             ))}
 
-            
+            <button className="mt-4 px-6 py-3 rounded-full bg-[#b88a44] text-white font-medium">
+              Sign In
+            </button>
 
           </div>
         </div>
+
       </nav>
     </header>
   );
