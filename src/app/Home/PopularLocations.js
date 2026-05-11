@@ -79,10 +79,6 @@ export default function PopularLocations() {
     ? rajasthanLocations
     : rajasthanLocations.slice(0, 8);
 
-  const handleCardClick = (location) => {
-    router.push(`/location/${location.id}`);
-  };
-
   return (
     <section className="relative py-24 overflow-hidden bg-[#f6f2ea] font-body">
       {/* ✨ Fonts + Animations */}
@@ -148,7 +144,7 @@ export default function PopularLocations() {
         {visibleLocations.map((item, i) => (
           <div
             key={i}
-            onClick={() => handleCardClick(item)}
+            onClick={() => router.push("/Home/propertyLocationGrid")}
             className="group card-hover bg-white/80 backdrop-blur border border-[#d9c3a0]/20 rounded-3xl overflow-hidden"
           >
             {/* IMAGE */}
