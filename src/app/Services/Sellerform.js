@@ -9,6 +9,12 @@ import {
   Mail,
   ImagePlus,
   FileText,
+  BedDouble,
+  Bath,
+  Ruler,
+  Sofa,
+  Building2,
+  Map,
 } from "lucide-react";
 
 export default function SellerForm() {
@@ -16,9 +22,18 @@ export default function SellerForm() {
     name: "",
     phone: "",
     email: "",
-    location: "",
+    state: "",
+    city: "",
+    area: "",
+    address: "",
+    pincode: "",
     price: "",
     propertyType: "",
+    bedrooms: "",
+    bathrooms: "",
+    areaSize: "",
+    areaUnit: "",
+    furnishedType: "",
     description: "",
     images: null,
   });
@@ -47,8 +62,7 @@ export default function SellerForm() {
 
   return (
     <section className="w-full min-h-screen bg-[#f5f5f5] flex items-center justify-center px-4 py-14">
-
-      <div className="w-full max-w-5xl">
+      <div className="w-full max-w-6xl">
 
         {/* Heading */}
         <div className="text-center mb-10">
@@ -68,71 +82,87 @@ export default function SellerForm() {
         >
 
           {/* Name */}
-          <div className="flex items-center gap-3 border border-gray-300 rounded-2xl px-4 py-3 bg-[#fafafa] focus-within:border-[#b88a44] transition">
-            <FileText size={18} className="text-[#b88a44]" />
-
-            <input
-              type="text"
-              name="name"
-              placeholder="Full Name"
-              onChange={handleChange}
-              className="w-full bg-transparent outline-none text-black placeholder:text-gray-400"
-              required
-            />
-          </div>
+          <InputBox
+            icon={<FileText size={18} className="text-[#b88a44]" />}
+            type="text"
+            name="name"
+            placeholder="Full Name"
+            onChange={handleChange}
+          />
 
           {/* Phone */}
-          <div className="flex items-center gap-3 border border-gray-300 rounded-2xl px-4 py-3 bg-[#fafafa] focus-within:border-[#b88a44] transition">
-            <Phone size={18} className="text-[#b88a44]" />
-
-            <input
-              type="text"
-              name="phone"
-              placeholder="Phone Number"
-              onChange={handleChange}
-              className="w-full bg-transparent outline-none text-black placeholder:text-gray-400"
-              required
-            />
-          </div>
+          <InputBox
+            icon={<Phone size={18} className="text-[#b88a44]" />}
+            type="text"
+            name="phone"
+            placeholder="Phone Number"
+            onChange={handleChange}
+          />
 
           {/* Email */}
-          <div className="flex items-center gap-3 border border-gray-300 rounded-2xl px-4 py-3 bg-[#fafafa] focus-within:border-[#b88a44] transition">
-            <Mail size={18} className="text-[#b88a44]" />
+          <InputBox
+            icon={<Mail size={18} className="text-[#b88a44]" />}
+            type="email"
+            name="email"
+            placeholder="Email Address"
+            onChange={handleChange}
+          />
 
-            <input
-              type="email"
-              name="email"
-              placeholder="Email Address"
+          {/* State */}
+          <InputBox
+            icon={<Map size={18} className="text-[#b88a44]" />}
+            type="text"
+            name="state"
+            placeholder="State"
+            onChange={handleChange}
+          />
+
+          {/* City */}
+          <InputBox
+            icon={<Building2 size={18} className="text-[#b88a44]" />}
+            type="text"
+            name="city"
+            placeholder="City"
+            onChange={handleChange}
+          />
+
+          {/* Area */}
+          <InputBox
+            icon={<MapPin size={18} className="text-[#b88a44]" />}
+            type="text"
+            name="area"
+            placeholder="Area"
+            onChange={handleChange}
+          />
+
+          {/* Address */}
+          <div className="md:col-span-2">
+            <textarea
+              name="address"
+              rows="3"
+              placeholder="Full Property Address"
               onChange={handleChange}
-              className="w-full bg-transparent outline-none text-black placeholder:text-gray-400"
+              className="w-full border border-gray-300 rounded-2xl px-4 py-3 bg-[#fafafa] outline-none focus:border-[#b88a44] transition resize-none text-black placeholder:text-gray-400"
             />
           </div>
 
-          {/* Location */}
-          <div className="flex items-center gap-3 border border-gray-300 rounded-2xl px-4 py-3 bg-[#fafafa] focus-within:border-[#b88a44] transition">
-            <MapPin size={18} className="text-[#b88a44]" />
-
-            <input
-              type="text"
-              name="location"
-              placeholder="Property Location"
-              onChange={handleChange}
-              className="w-full bg-transparent outline-none text-black placeholder:text-gray-400"
-            />
-          </div>
+          {/* Pincode */}
+          <InputBox
+            icon={<MapPin size={18} className="text-[#b88a44]" />}
+            type="text"
+            name="pincode"
+            placeholder="Pincode"
+            onChange={handleChange}
+          />
 
           {/* Price */}
-          <div className="flex items-center gap-3 border border-gray-300 rounded-2xl px-4 py-3 bg-[#fafafa] focus-within:border-[#b88a44] transition">
-            <IndianRupee size={18} className="text-[#b88a44]" />
-
-            <input
-              type="text"
-              name="price"
-              placeholder="Expected Price"
-              onChange={handleChange}
-              className="w-full bg-transparent outline-none text-black placeholder:text-gray-400"
-            />
-          </div>
+          <InputBox
+            icon={<IndianRupee size={18} className="text-[#b88a44]" />}
+            type="text"
+            name="price"
+            placeholder="Expected Price"
+            onChange={handleChange}
+          />
 
           {/* Property Type */}
           <div className="flex items-center gap-3 border border-gray-300 rounded-2xl px-4 py-3 bg-[#fafafa] focus-within:border-[#b88a44] transition">
@@ -148,6 +178,66 @@ export default function SellerForm() {
               <option>Villa</option>
               <option>Plot</option>
               <option>Commercial</option>
+            </select>
+          </div>
+
+          {/* Furnished Type */}
+          <div className="flex items-center gap-3 border border-gray-300 rounded-2xl px-4 py-3 bg-[#fafafa] focus-within:border-[#b88a44] transition">
+            <Sofa size={18} className="text-[#b88a44]" />
+
+            <select
+              name="furnishedType"
+              onChange={handleChange}
+              className="w-full bg-transparent outline-none text-black"
+            >
+              <option value="">Furnished Type</option>
+              <option>Furnished</option>
+              <option>Semi Furnished</option>
+              <option>Unfurnished</option>
+            </select>
+          </div>
+
+          {/* Bedrooms */}
+          <InputBox
+            icon={<BedDouble size={18} className="text-[#b88a44]" />}
+            type="number"
+            name="bedrooms"
+            placeholder="Bedrooms"
+            onChange={handleChange}
+          />
+
+          {/* Bathrooms */}
+          <InputBox
+            icon={<Bath size={18} className="text-[#b88a44]" />}
+            type="number"
+            name="bathrooms"
+            placeholder="Bathrooms"
+            onChange={handleChange}
+          />
+
+          {/* Area Size */}
+          <InputBox
+            icon={<Ruler size={18} className="text-[#b88a44]" />}
+            type="number"
+            name="areaSize"
+            placeholder="Area Size"
+            onChange={handleChange}
+          />
+
+          {/* Area Unit */}
+          <div className="flex items-center gap-3 border border-gray-300 rounded-2xl px-4 py-3 bg-[#fafafa] focus-within:border-[#b88a44] transition">
+            <Ruler size={18} className="text-[#b88a44]" />
+
+            <select
+              name="areaUnit"
+              onChange={handleChange}
+              className="w-full bg-transparent outline-none text-black"
+            >
+              <option value="">Area Unit</option>
+              <option>sqft</option>
+              <option>gaj</option>
+              <option>bigha</option>
+              <option>acre</option>
             </select>
           </div>
 
@@ -199,5 +289,27 @@ export default function SellerForm() {
         </form>
       </div>
     </section>
+  );
+}
+
+function InputBox({
+  icon,
+  type,
+  name,
+  placeholder,
+  onChange,
+}) {
+  return (
+    <div className="flex items-center gap-3 border border-gray-300 rounded-2xl px-4 py-3 bg-[#fafafa] focus-within:border-[#b88a44] hover:border-[#d4af37] transition">
+      {icon}
+
+      <input
+        type={type}
+        name={name}
+        placeholder={placeholder}
+        onChange={onChange}
+        className="w-full bg-transparent outline-none text-black placeholder:text-gray-400"
+      />
+    </div>
   );
 }
