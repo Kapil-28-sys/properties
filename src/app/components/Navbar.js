@@ -35,22 +35,21 @@ export default function Navbar() {
         <div className="h-[85px] flex items-center justify-between">
 
           {/* LOGO */}
-          <Link href="/" className="flex items-center gap-4">
+         {/* LOGO */}
+<Link href="/" className="flex items-center gap-3 group">
+  
+  {/* Logo Image */}
+  <div className="relative w-20 h-20 rounded-2xl overflow-hidden   ">
+    <img
+      src="/properties.png"
+      alt="Estate Prime Logo"
+      className="w-20 h-20 object-cover group-hover:scale-110 transition-transform duration-300"
+    />
+  </div>
 
-            <div className="w-11 h-11 rounded-2xl bg-[#b88a44] flex items-center justify-center text-white font-bold shadow-md">
-              E
-            </div>
+  
 
-            <div className="flex flex-col leading-tight">
-              <span className="text-black text-xl font-semibold tracking-wide">
-                Estate Prime
-              </span>
-              <span className="text-[10px] uppercase tracking-[0.25em] text-gray-500">
-                Luxury Real Estate
-              </span>
-            </div>
-
-          </Link>
+</Link>
 
           {/* DESKTOP NAV */}
           <div className="hidden lg:flex items-center gap-10">
