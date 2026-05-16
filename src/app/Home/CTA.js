@@ -1,12 +1,25 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import {
-  ArrowUpRight,
-  BadgeCheck,
-  Building2,
-  Sparkles,
-} from "lucide-react";
+import { ArrowUpRight, BadgeCheck, Building2, Sparkles, Phone } from "lucide-react";
+
+const cards = [
+  {
+    title: "Verified Listings",
+    desc: "Every property is thoroughly vetted and documented for a fully trusted experience.",
+    icon: <BadgeCheck size={22} />,
+  },
+  {
+    title: "Luxury Locations",
+    desc: "Modern homes in Rajasthan's highest-growth premium cities and heritage districts.",
+    icon: <Building2 size={22} />,
+  },
+  {
+    title: "Smooth Experience",
+    desc: "Fast, transparent and entirely effortless from first browse to final handover.",
+    icon: <Sparkles size={22} />,
+  },
+];
 
 export default function CTABanner() {
   const ref = useRef(null);
@@ -14,196 +27,401 @@ export default function CTABanner() {
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) setShow(true);
-      },
+      ([entry]) => { if (entry.isIntersecting) setShow(true); },
       { threshold: 0.2 }
     );
-
     if (ref.current) observer.observe(ref.current);
-
-    return () => {
-      if (ref.current) observer.unobserve(ref.current);
-    };
+    return () => { if (ref.current) observer.unobserve(ref.current); };
   }, []);
 
-  const cards = [
-    {
-      title: "Verified Listings",
-      desc: "Trusted premium properties across Rajasthan.",
-      icon: <BadgeCheck size={22} />,
-    },
-    {
-      title: "Luxury Locations",
-      desc: "Modern homes in high-growth premium cities.",
-      icon: <Building2 size={22} />,
-    },
-    {
-      title: "Smooth Experience",
-      desc: "Fast, transparent and effortless property journey.",
-      icon: <Sparkles size={22} />,
-    },
-  ];
-
   return (
-    <section className="relative overflow-hidden bg-[#f6f2ea] py-24 font-body">
-
-      {/* ✨ Fonts + Animations */}
+    <section
+      style={{
+        position: "relative",
+        overflow: "hidden",
+        background: "var(--background)",
+        padding: "96px 0",
+      }}
+    >
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Jost:wght@300;400;500&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap');
 
-        .font-heading { font-family: 'Cormorant Garamond', serif; }
-        .font-body { font-family: 'Jost', sans-serif; }
+        .cta * { box-sizing: border-box; }
 
-        @keyframes fadeUp {
-          from { opacity: 0; transform: translateY(25px); }
-          to { opacity: 1; transform: translateY(0); }
+        @keyframes cta-pulse {
+          0%,100% { opacity: 1; transform: scale(1);    }
+          50%      { opacity: 0.6; transform: scale(1.3); }
+        }
+        @keyframes cta-spin {
+          from { transform: rotate(0deg);   }
+          to   { transform: rotate(360deg); }
         }
 
-        .fade-up { animation: fadeUp 0.8s ease forwards; }
+        .cta-pulse { animation: cta-pulse 2.2s ease-in-out infinite; }
 
-        .glass {
-          backdrop-filter: blur(14px);
-          background: rgba(255,255,255,0.75);
-        }
-
-        .card {
-          transition: all 0.4s ease;
-        }
-
-        .card:hover {
-          transform: translateY(-8px);
-          box-shadow: 0 25px 70px rgba(0,0,0,0.12);
-        }
-
-        .gold-line {
+        .cta-card {
+          transition: var(--transition);
           position: relative;
           overflow: hidden;
         }
+        .cta-card:hover {
+          transform: translateY(-7px);
+          box-shadow: var(--shadow-md);
+        }
+        .cta-card:hover .cta-card-icon {
+          background: var(--primary) !important;
+          color: var(--white) !important;
+        }
+        .cta-card:hover .cta-card-line {
+          width: 100% !important;
+        }
 
-        .gold-line::after {
+        .cta-card-icon { transition: var(--transition); }
+
+        .cta-card-line {
+          transition: width 0.5s cubic-bezier(0.22,1,0.36,1);
+        }
+
+        .cta-primary-btn {
+          position: relative;
+          overflow: hidden;
+          transition: var(--transition);
+          cursor: pointer;
+        }
+        .cta-primary-btn::before {
           content: "";
           position: absolute;
-          bottom: 0;
-          left: 0;
-          width: 0%;
-          height: 3px;
-          background: #b88a44;
-          transition: 0.5s ease;
+          inset: 0;
+          background: linear-gradient(135deg, var(--primary-light), var(--primary));
+          transform: translateY(101%);
+          transition: transform 0.42s cubic-bezier(0.22,1,0.36,1);
+          z-index: 0;
         }
+        .cta-primary-btn:hover::before { transform: translateY(0); }
+        .cta-primary-btn:hover { transform: scale(1.03); }
+        .cta-primary-btn > * { position: relative; z-index: 1; }
 
-        .gold-line:hover::after {
-          width: 100%;
+        .cta-secondary-btn {
+          position: relative;
+          overflow: hidden;
+          transition: var(--transition);
+          cursor: pointer;
         }
+        .cta-secondary-btn::before {
+          content: "";
+          position: absolute;
+          inset: 0;
+          background: var(--text);
+          transform: translateX(-101%);
+          transition: transform 0.42s cubic-bezier(0.22,1,0.36,1);
+          z-index: 0;
+        }
+        .cta-secondary-btn:hover::before { transform: translateX(0); }
+        .cta-secondary-btn:hover { border-color: var(--text) !important; color: var(--white) !important; }
+        .cta-secondary-btn > * { position: relative; z-index: 1; }
       `}</style>
 
-      {/* BACKGROUND */}
-      <div className="absolute inset-0 opacity-[0.06] bg-[radial-gradient(#000_1px,transparent_1px)] [background-size:26px_26px]" />
+      {/* ── Dot pattern ── */}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          opacity: 0.07,
+          backgroundImage: "radial-gradient(var(--text) 1px, transparent 1px)",
+          backgroundSize: "26px 26px",
+          pointerEvents: "none",
+        }}
+      />
 
-      {/* GLOW */}
-      <div className="absolute top-[-120px] left-1/2 -translate-x-1/2 w-[650px] h-[650px] bg-[#b88a44]/10 blur-[140px]" />
+      {/* ── Center glow ── */}
+      <div
+        style={{
+          position: "absolute",
+          top: -140,
+          left: "50%",
+          transform: "translateX(-50%)",
+          width: 680,
+          height: 680,
+          borderRadius: "50%",
+          background: "rgba(245,158,11,0.08)",
+          filter: "blur(130px)",
+          pointerEvents: "none",
+        }}
+      />
+
+      {/* ── Decorative orbit ring ── */}
+      <div
+        style={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%,-50%)",
+          width: 700,
+          height: 700,
+          borderRadius: "50%",
+          border: "1px dashed rgba(245,158,11,0.1)",
+          pointerEvents: "none",
+        }}
+      />
 
       <div
-        ref={ref}
-        className={`relative mx-auto max-w-6xl px-5 transition-all duration-1000 ${
-          show ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
-        }`}
+        className="cta"
+        style={{ position: "relative", maxWidth: 1200, margin: "0 auto", padding: "0 28px" }}
       >
+        <div
+          ref={ref}
+          style={{
+            transition: "opacity 0.9s ease, transform 0.9s cubic-bezier(0.22,1,0.36,1)",
+            opacity: show ? 1 : 0,
+            transform: show ? "translateY(0)" : "translateY(28px)",
+          }}
+        >
 
-        {/* MAIN CONTAINER */}
-        <div className="glass rounded-[40px] border border-[#d9c3a0]/30 shadow-[0_20px_80px_rgba(0,0,0,0.06)] p-8 md:p-14">
+          {/* ── Main container ── */}
+          <div
+            style={{
+              borderRadius: 36,
+              border: "1px solid var(--border)",
+              background: "rgba(255,255,255,0.78)",
+              backdropFilter: "blur(18px)",
+              boxShadow: "var(--shadow-md)",
+              padding: "56px 48px",
+            }}
+          >
 
-          {/* BADGE */}
-          <div className="flex justify-center fade-up">
+            {/* ── Badge ── */}
+            <div style={{ display: "flex", justifyContent: "center", marginBottom: 32 }}>
+              <div
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 8,
+                  padding: "7px 18px 7px 12px",
+                  borderRadius: 100,
+                  background: "rgba(245,158,11,0.08)",
+                  border: "1px solid rgba(245,158,11,0.22)",
+                }}
+              >
+                <span
+                  className="cta-pulse"
+                  style={{
+                    width: 7,
+                    height: 7,
+                    borderRadius: "50%",
+                    background: "var(--primary)",
+                    display: "inline-block",
+                  }}
+                />
+                <span
+                  style={{
+                    fontFamily: "'DM Sans', sans-serif",
+                    fontSize: 10,
+                    letterSpacing: "0.3em",
+                    textTransform: "uppercase",
+                    color: "var(--primary-dark)",
+                    fontWeight: 500,
+                  }}
+                >
+                  Rajasthan Property Hub
+                </span>
+              </div>
+            </div>
 
-            <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full border border-[#b88a44]/20 bg-[#b88a44]/10 text-[#b88a44] text-sm font-medium">
+            {/* ── Heading ── */}
+            <div style={{ textAlign: "center" }}>
+              <h2
+                style={{
+                  fontFamily: "'Cormorant Garamond', serif",
+                  fontSize: "clamp(2.8rem, 5.5vw, 5.6rem)",
+                  lineHeight: 0.92,
+                  letterSpacing: "-0.03em",
+                  fontWeight: 300,
+                  color: "var(--text)",
+                  margin: 0,
+                }}
+              >
+                Discover Your
+                <span
+                  style={{
+                    display: "block",
+                    fontWeight: 600,
+                    fontStyle: "italic",
+                    color: "var(--primary)",
+                    margin: "4px 0",
+                  }}
+                >
+                  Dream Property
+                </span>
+                In Rajasthan
+              </h2>
 
-              <span className="w-2 h-2 rounded-full bg-[#b88a44] animate-pulse" />
+              <p
+                style={{
+                  fontFamily: "'DM Sans', sans-serif",
+                  marginTop: 20,
+                  fontSize: 15,
+                  lineHeight: 1.85,
+                  color: "var(--text-light)",
+                  maxWidth: 560,
+                  margin: "20px auto 0",
+                }}
+              >
+                Explore verified homes, luxury villas, apartments, and investment
+                properties with a seamless, premium end-to-end experience.
+              </p>
+            </div>
 
-              Rajasthan Property Hub
+            {/* ── Cards ── */}
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
+                gap: 16,
+                marginTop: 52,
+              }}
+            >
+              {cards.map((item, i) => (
+                <div
+                  key={i}
+                  className="cta-card"
+                  style={{
+                    padding: "26px 24px 28px",
+                    borderRadius: 22,
+                    background: "var(--white)",
+                    border: "1px solid var(--border)",
+                    boxShadow: "var(--shadow-sm)",
+                  }}
+                >
+                  {/* Icon */}
+                  <div
+                    className="cta-card-icon"
+                    style={{
+                      width: 46,
+                      height: 46,
+                      borderRadius: 14,
+                      background: "rgba(245,158,11,0.09)",
+                      color: "var(--primary)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    {item.icon}
+                  </div>
 
+                  <h3
+                    style={{
+                      fontFamily: "'Cormorant Garamond', serif",
+                      fontSize: "1.4rem",
+                      fontWeight: 600,
+                      color: "var(--text)",
+                      margin: "18px 0 0",
+                      letterSpacing: "-0.01em",
+                    }}
+                  >
+                    {item.title}
+                  </h3>
+
+                  {/* Divider */}
+                  <div
+                    className="cta-card-line"
+                    style={{
+                      width: 32,
+                      height: 1,
+                      background: "linear-gradient(to right, var(--primary), transparent)",
+                      margin: "10px 0 12px",
+                    }}
+                  />
+
+                  <p
+                    style={{
+                      fontFamily: "'DM Sans', sans-serif",
+                      fontSize: 13.5,
+                      lineHeight: 1.8,
+                      color: "var(--text-light)",
+                      margin: 0,
+                    }}
+                  >
+                    {item.desc}
+                  </p>
+
+                  {/* Bottom accent line on hover */}
+                  <div
+                    className="cta-card-line"
+                    style={{
+                      position: "absolute",
+                      bottom: 0,
+                      left: 0,
+                      width: 0,
+                      height: 3,
+                      background: "linear-gradient(to right, var(--primary), var(--primary-light))",
+                      borderRadius: "0 2px 0 0",
+                    }}
+                  />
+                </div>
+              ))}
+            </div>
+
+            {/* ── Buttons ── */}
+            <div
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+                justifyContent: "center",
+                gap: 12,
+                marginTop: 52,
+              }}
+            >
+              {/* Primary */}
+              <button
+                className="cta-primary-btn"
+                style={{
+                  padding: "14px 32px",
+                  borderRadius: 100,
+                  border: "none",
+                  background: "var(--primary)",
+                  color: "var(--white)",
+                  fontFamily: "'DM Sans', sans-serif",
+                  fontSize: 11,
+                  fontWeight: 500,
+                  letterSpacing: "0.22em",
+                  textTransform: "uppercase",
+                  boxShadow: "0 8px 28px rgba(245,158,11,0.32)",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 8,
+                }}
+              >
+                <span>Explore Properties</span>
+                <ArrowUpRight size={15} />
+              </button>
+
+              {/* Secondary */}
+              <button
+                className="cta-secondary-btn"
+                style={{
+                  padding: "14px 32px",
+                  borderRadius: 100,
+                  border: "1px solid var(--border)",
+                  background: "var(--white)",
+                  color: "var(--text)",
+                  fontFamily: "'DM Sans', sans-serif",
+                  fontSize: 11,
+                  fontWeight: 500,
+                  letterSpacing: "0.22em",
+                  textTransform: "uppercase",
+                  boxShadow: "var(--shadow-sm)",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 8,
+                }}
+              >
+                <Phone size={14} />
+                <span>Contact Agent</span>
+              </button>
             </div>
 
           </div>
-
-          {/* HEADING */}
-          <div className="text-center mt-8 fade-up">
-
-            <h2 className="font-heading text-4xl md:text-6xl font-semibold text-[#1f1f1f] leading-tight">
-
-              Discover Your
-              <span className="text-[#b88a44] mx-2 relative">
-                Dream Property
-              </span>
-              In Rajasthan
-
-            </h2>
-
-            <p className="mt-5 max-w-2xl mx-auto text-gray-600 text-base md:text-lg leading-7">
-              Explore verified homes, luxury villas, apartments, and
-              investment properties with a seamless premium experience.
-            </p>
-
-          </div>
-
-          {/* CARDS */}
-          <div className="mt-14 grid md:grid-cols-3 gap-6">
-
-            {cards.map((item, i) => (
-              <div
-                key={i}
-                className="card relative p-7 rounded-3xl bg-white/70 border border-[#d9c3a0]/20 shadow-sm"
-              >
-
-                {/* ICON */}
-                <div className="w-12 h-12 rounded-2xl bg-[#b88a44]/10 text-[#b88a44] flex items-center justify-center transition group-hover:scale-110">
-
-                  {item.icon}
-
-                </div>
-
-                <h3 className="font-heading mt-5 text-xl font-semibold text-[#1f1f1f]">
-                  {item.title}
-                </h3>
-
-                <p className="mt-2 text-sm text-gray-600 leading-6">
-                  {item.desc}
-                </p>
-
-              </div>
-            ))}
-
-          </div>
-
-          {/* BUTTONS */}
-          <div className="mt-14 flex flex-wrap justify-center gap-4">
-
-            {/* PRIMARY */}
-            <button className="group relative overflow-hidden rounded-full bg-[#b88a44] px-8 py-3.5 text-white text-sm font-medium shadow-lg hover:scale-[1.03] transition">
-
-              <div className="absolute inset-0 bg-gradient-to-r from-[#d8a85b] to-[#b88a44] translate-y-full group-hover:translate-y-0 transition" />
-
-              <span className="relative flex items-center gap-2">
-
-                Explore Properties
-                <ArrowUpRight
-                  size={16}
-                  className="group-hover:rotate-45 transition"
-                />
-
-              </span>
-
-            </button>
-
-            {/* SECONDARY */}
-            <button className="gold-line rounded-full border border-black/10 bg-white px-8 py-3.5 text-sm font-medium text-[#1f1f1f] hover:bg-[#1f1f1f] hover:text-white transition">
-
-              Contact Agent
-
-            </button>
-
-          </div>
-
         </div>
       </div>
     </section>

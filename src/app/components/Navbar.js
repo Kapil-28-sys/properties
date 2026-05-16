@@ -7,10 +7,10 @@ import { Menu, X } from "lucide-react";
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [activeLink, setActiveLink] = useState("/");
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 40);
-
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -24,98 +24,468 @@ export default function Navbar() {
   ];
 
   return (
-    <header
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${
-        scrolled
-          ? "bg-white/90 backdrop-blur-xl shadow-md border-b border-black/5"
-          : "bg-white/70 backdrop-blur-md"
-      }`}
-    >
-      <nav className="w-full px-5 sm:px-6 lg:px-10">
-        <div className="h-[85px] flex items-center justify-between">
+    <>
+      <style>{`
+        .navbar-root {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          z-index: 50;
+          transition: var(--transition);
+        }
 
-          {/* LOGO */}
-         {/* LOGO */}
-<Link href="/" className="flex items-center gap-3 group">
-  
-  {/* Logo Image */}
-  <div className="relative w-20 h-20 rounded-2xl overflow-hidden   ">
-    <img
-      src="/properties.png"
-      alt="Estate Prime Logo"
-      className="w-20 h-20 object-cover group-hover:scale-110 transition-transform duration-300"
-    />
-  </div>
+        .navbar-root.scrolled {
+          background: rgba(255, 255, 255, 0.96);
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+          box-shadow: var(--shadow-md);
+          border-bottom: 1.5px solid var(--border);
+        }
 
-  
+        .navbar-root.top {
+          background: rgba(255, 255, 255, 0.75);
+          backdrop-filter: blur(12px);
+          -webkit-backdrop-filter: blur(12px);
+        }
 
-</Link>
+        .navbar-inner {
+          max-width: 1400px;
+          margin: 0 auto;
+          padding: 0 2rem;
+          height: 80px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 2rem;
+        }
 
-          {/* DESKTOP NAV */}
-          <div className="hidden lg:flex items-center gap-10">
+        /* LOGO */
+        .logo-link {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          text-decoration: none;
+          flex-shrink: 0;
+        }
 
-            {navLinks.map((link) => (
-              <Link
-                key={link.name}
-                href={link.href}
-                className="group relative text-[13px] uppercase tracking-[0.18em] text-gray-700 hover:text-black transition duration-300"
-              >
-                {link.name}
+        .logo-img-wrap {
+          width: 70px;
+          height: 70px;
+          
+          overflow: hidden;
+         
+          transition: var(--transition);
+        
+        }
 
-                {/* underline (short + centered) */}
-                <span className="absolute left-1/2 -translate-x-1/2 -bottom-2 h-[1px] w-0 bg-[#b88a44] group-hover:w-[55%] transition-all duration-300"></span>
+        .logo-link:hover .logo-img-wrap {
+          
+          transform: rotate(-2deg) scale(1.04);
+        }
 
-              </Link>
-            ))}
+        .logo-img-wrap img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          display: block;
+        }
 
-          </div>
+        .logo-text {
+          display: flex;
+          flex-direction: column;
+          line-height: 1.2;
+        }
 
-          {/* CTA */}
-          <div className="hidden lg:flex items-center gap-4">
+        .logo-title {
+          font-size: 17px;
+          font-weight: 700;
+          color: var(--text);
+          letter-spacing: -0.3px;
+        }
 
-            <button className="px-6 py-2.5 rounded-full bg-[#b88a44] text-white text-sm font-medium hover:bg-black transition duration-300 shadow-sm">
-              Sign In
+        .logo-sub {
+          font-size: 10px;
+          text-transform: uppercase;
+          letter-spacing: 0.2em;
+          color: var(--primary);
+          font-weight: 600;
+        }
+
+        /* DESKTOP NAV */
+        .desktop-nav {
+          display: none;
+          align-items: center;
+          gap: 0;
+        }
+
+        @media (min-width: 1024px) {
+          .desktop-nav { display: flex; }
+        }
+
+        .nav-link {
+          position: relative;
+          padding: 8px 18px;
+          font-size: 12.5px;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.14em;
+          color: var(--text-light);
+          text-decoration: none;
+          transition: var(--transition);
+          border-radius: 999px;
+        }
+
+        .nav-link::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          border-radius: 999px;
+          background: transparent;
+          transition: var(--transition);
+        }
+
+        .nav-link:hover {
+          color: var(--secondary);
+        }
+
+        .nav-link:hover::before {
+          background: rgba(15, 61, 145, 0.06);
+        }
+
+        .nav-link.active {
+          color: var(--secondary);
+        }
+
+        .nav-link.active::before {
+          background: rgba(15, 61, 145, 0.08);
+        }
+
+        .nav-link-dot {
+          position: absolute;
+          bottom: 4px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 4px;
+          height: 4px;
+          border-radius: 50%;
+          background: var(--primary);
+          opacity: 0;
+          transition: var(--transition);
+        }
+
+        .nav-link.active .nav-link-dot,
+        .nav-link:hover .nav-link-dot {
+          opacity: 1;
+        }
+
+        /* CTA */
+        .cta-group {
+          display: none;
+          align-items: center;
+          gap: 12px;
+          flex-shrink: 0;
+        }
+
+        @media (min-width: 1024px) {
+          .cta-group { display: flex; }
+        }
+
+        .btn-outline {
+          padding: 9px 22px;
+          border-radius: 999px;
+          border: 1.5px solid var(--secondary);
+          background: transparent;
+          color: var(--secondary);
+          font-size: 13px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: var(--transition);
+          letter-spacing: 0.03em;
+        }
+
+        .btn-outline:hover {
+          background: var(--secondary);
+          color: var(--white);
+        }
+
+        .btn-primary {
+          padding: 10px 26px;
+          border-radius: 999px;
+          border: none;
+          background: var(--primary);
+          color: var(--white);
+          font-size: 13px;
+          font-weight: 700;
+          cursor: pointer;
+          transition: var(--transition);
+          letter-spacing: 0.03em;
+          box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35);
+          position: relative;
+          overflow: hidden;
+        }
+
+        .btn-primary::after {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+          border-radius: inherit;
+          pointer-events: none;
+        }
+
+        .btn-primary:hover {
+          background: var(--primary-dark);
+          transform: translateY(-1px);
+          box-shadow: 0 6px 20px rgba(245, 158, 11, 0.45);
+        }
+
+        .btn-primary:active {
+          transform: translateY(0);
+        }
+
+        /* MOBILE TOGGLE */
+        .mobile-toggle {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 44px;
+          height: 44px;
+          border-radius: 12px;
+          border: 1.5px solid var(--border);
+          background: var(--white);
+          color: var(--text);
+          cursor: pointer;
+          transition: var(--transition);
+        }
+
+        .mobile-toggle:hover {
+          border-color: var(--primary);
+          color: var(--primary);
+          background: rgba(245, 158, 11, 0.06);
+        }
+
+        @media (min-width: 1024px) {
+          .mobile-toggle { display: none; }
+        }
+
+        /* MOBILE MENU */
+        .mobile-menu-wrap {
+          overflow: hidden;
+          transition: max-height 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+                      opacity 0.35s ease;
+        }
+
+        .mobile-menu-wrap.open {
+          max-height: 600px;
+          opacity: 1;
+        }
+
+        .mobile-menu-wrap.closed {
+          max-height: 0;
+          opacity: 0;
+        }
+
+        .mobile-menu {
+          margin: 0 0 12px;
+          border-radius: var(--radius);
+          border: 1.5px solid var(--border);
+          background: var(--white);
+          box-shadow: var(--shadow-md);
+          overflow: hidden;
+        }
+
+        .mobile-menu-header {
+          padding: 18px 20px 14px;
+          border-bottom: 1px solid var(--border);
+          display: flex;
+          align-items: center;
+          gap: 10px;
+        }
+
+        .mobile-menu-badge {
+          font-size: 10px;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.12em;
+          color: var(--primary);
+          background: rgba(245, 158, 11, 0.1);
+          padding: 3px 10px;
+          border-radius: 999px;
+        }
+
+        .mobile-links {
+          padding: 8px 8px 16px;
+          display: flex;
+          flex-direction: column;
+          gap: 2px;
+        }
+
+        .mobile-nav-link {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 13px 14px;
+          border-radius: 12px;
+          text-decoration: none;
+          color: var(--text);
+          font-size: 15px;
+          font-weight: 500;
+          transition: var(--transition);
+        }
+
+        .mobile-nav-link:hover {
+          background: rgba(15, 61, 145, 0.06);
+          color: var(--secondary);
+          padding-left: 18px;
+        }
+
+        .mobile-nav-link svg {
+          opacity: 0;
+          transform: translateX(-4px);
+          transition: var(--transition);
+          color: var(--primary);
+        }
+
+        .mobile-nav-link:hover svg {
+          opacity: 1;
+          transform: translateX(0);
+        }
+
+        .mobile-cta {
+          padding: 0 16px 20px;
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+        }
+
+        .mobile-btn-outline {
+          padding: 13px;
+          border-radius: 12px;
+          border: 1.5px solid var(--secondary);
+          background: transparent;
+          color: var(--secondary);
+          font-size: 14px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: var(--transition);
+          text-align: center;
+        }
+
+        .mobile-btn-outline:hover {
+          background: var(--secondary);
+          color: var(--white);
+        }
+
+        .mobile-btn-primary {
+          padding: 14px;
+          border-radius: 12px;
+          border: none;
+          background: var(--primary);
+          color: var(--white);
+          font-size: 14px;
+          font-weight: 700;
+          cursor: pointer;
+          transition: var(--transition);
+          text-align: center;
+          box-shadow: 0 4px 14px rgba(245, 158, 11, 0.3);
+        }
+
+        .mobile-btn-primary:hover {
+          background: var(--primary-dark);
+        }
+
+        /* DIVIDER */
+        .mobile-divider {
+          height: 1px;
+          background: var(--border);
+          margin: 0 16px 16px;
+        }
+      `}</style>
+
+      <header className={`navbar-root ${scrolled ? "scrolled" : "top"}`}>
+        <nav style={{ width: "100%", padding: "0 1.25rem" }}>
+          <div className="navbar-inner">
+
+            {/* LOGO */}
+            <Link href="/" className="logo-link" onClick={() => setActiveLink("/")}>
+              <div className="logo-img-wrap">
+                <img src="/properties.png" alt="Estate Prime Logo" />
+              </div>
+              
+            </Link>
+
+            {/* DESKTOP NAV */}
+            <div className="desktop-nav">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.name}
+                  href={link.href}
+                  onClick={() => setActiveLink(link.href)}
+                  className={`nav-link ${activeLink === link.href ? "active" : ""}`}
+                >
+                  {link.name}
+                  <span className="nav-link-dot" aria-hidden="true" />
+                </Link>
+              ))}
+            </div>
+
+            {/* CTA BUTTONS */}
+            <div className="cta-group">
+              <button className="btn-outline">Sign In</button>
+              <button className="btn-primary">List Property</button>
+            </div>
+
+            {/* MOBILE TOGGLE */}
+            <button
+              className="mobile-toggle"
+              onClick={() => setMobileOpen(!mobileOpen)}
+              aria-label="Toggle menu"
+            >
+              {mobileOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
 
           </div>
 
-          {/* MOBILE */}
-          <button
-            onClick={() => setMobileOpen(!mobileOpen)}
-            className="lg:hidden text-black"
-          >
-            {mobileOpen ? <X size={26} /> : <Menu size={26} />}
-          </button>
+          {/* MOBILE MENU */}
+          <div className={`mobile-menu-wrap ${mobileOpen ? "open" : "closed"}`}>
+            <div className="mobile-menu">
 
-        </div>
+              <div className="mobile-menu-header">
+                <span className="mobile-menu-badge">Navigation</span>
+              </div>
 
-        {/* MOBILE MENU */}
-        <div
-          className={`lg:hidden overflow-hidden transition-all duration-500 ${
-            mobileOpen ? "max-h-[500px] opacity-100 pb-6" : "max-h-0 opacity-0"
-          }`}
-        >
-          <div className="mt-2 rounded-3xl border border-black/10 bg-white p-6 flex flex-col gap-5 shadow-lg">
+              <div className="mobile-links">
+                {navLinks.map((link) => (
+                  <Link
+                    key={link.name}
+                    href={link.href}
+                    className="mobile-nav-link"
+                    onClick={() => {
+                      setMobileOpen(false);
+                      setActiveLink(link.href);
+                    }}
+                  >
+                    {link.name}
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                  </Link>
+                ))}
+              </div>
 
-            {navLinks.map((link) => (
-              <Link
-                key={link.name}
-                href={link.href}
-                onClick={() => setMobileOpen(false)}
-                className="text-gray-700 hover:text-black text-lg transition"
-              >
-                {link.name}
-              </Link>
-            ))}
+              <div className="mobile-divider" />
 
-            <button className="mt-4 px-6 py-3 rounded-full bg-[#b88a44] text-white font-medium">
-              Sign In
-            </button>
+              <div className="mobile-cta">
+                <button className="mobile-btn-outline">Sign In</button>
+                <button className="mobile-btn-primary">List Property →</button>
+              </div>
 
+            </div>
           </div>
-        </div>
 
-      </nav>
-    </header>
+        </nav>
+      </header>
+    </>
   );
 }

@@ -1,151 +1,419 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { ArrowUpRight, Calendar, MapPin, Search } from "lucide-react";
+
+const stats = [
+  { value: "10K+", label: "Happy Clients" },
+  { value: "500+", label: "Premium Homes" },
+  { value: "18%",  label: "Avg. ROI"      },
+  { value: "50+",  label: "Districts"     },
+];
+
 export default function HeroSection() {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
+
   return (
-    <section className="relative min-h-screen overflow-hidden bg-[#faf8f3]">
-
-      {/* Fonts + Animations */}
+    <section
+      style={{
+        position: "relative",
+        overflow: "hidden",
+        minHeight: "100svh",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap');
 
-        @keyframes fadeUp {
-          from { opacity: 0; transform: translateY(28px); }
-          to   { opacity: 1; transform: translateY(0); }
+        .hs * { box-sizing: border-box; }
+
+        /* ── Background zoom ── */
+        @keyframes hs-zoom {
+          from { transform: scale(1.08); }
+          to   { transform: scale(1);    }
         }
-        @keyframes slowZoom {
-          from { transform: scale(1.03); }
-          to   { transform: scale(1.11); }
-        }
-        @keyframes ping {
-          0%   { transform: scale(1); opacity: 0.7; }
-          100% { transform: scale(2.4); opacity: 0; }
-        }
-        @keyframes glowPulse {
-          0%, 100% { opacity: 0.6; }
-          50%       { opacity: 1; }
-        }
-        @keyframes scrollPulse {
-          0%, 100% { opacity: 0.4; transform: scaleY(1); }
-          50%       { opacity: 0.85; transform: scaleY(1.15); }
+        .hs-bg-img {
+          animation: hs-zoom 7s cubic-bezier(0.22,1,0.36,1) forwards;
         }
 
-        .hero-animate        { opacity: 0; animation: fadeUp 1s ease forwards; }
-        .delay-1             { animation-delay: 0.1s; }
-        .delay-2             { animation-delay: 0.2s; }
-        .delay-3             { animation-delay: 0.35s; }
-        .delay-4             { animation-delay: 0.45s; }
-        .delay-5             { animation-delay: 0.6s; }
-        .delay-6             { animation-delay: 0.8s; }
+        /* ── Staggered content entrance ── */
+        @keyframes hs-up {
+          from { opacity: 0; transform: translateY(24px); }
+          to   { opacity: 1; transform: translateY(0);    }
+        }
+        @keyframes hs-in {
+          from { opacity: 0; }
+          to   { opacity: 1; }
+        }
 
-        .animate-slowZoom    { animation: slowZoom 18s ease-in-out infinite alternate; }
-        .animate-glowPulse   { animation: glowPulse 5s ease-in-out infinite; }
-        .animate-glowPulse-r { animation: glowPulse 7s ease-in-out infinite reverse; }
-        .animate-ping-gold   { animation: ping 1.8s ease-out infinite; }
-        .animate-scrollPulse { animation: scrollPulse 2s ease-in-out infinite; }
+        .hs-d1 { animation: hs-up 0.8s 0.2s cubic-bezier(0.22,1,0.36,1) both; }
+        .hs-d2 { animation: hs-up 0.8s 0.4s cubic-bezier(0.22,1,0.36,1) both; }
+        .hs-d3 { animation: hs-up 0.8s 0.55s cubic-bezier(0.22,1,0.36,1) both; }
+        .hs-d4 { animation: hs-up 0.8s 0.7s cubic-bezier(0.22,1,0.36,1) both; }
+        .hs-d5 { animation: hs-up 0.8s 0.85s cubic-bezier(0.22,1,0.36,1) both; }
+        .hs-d6 { animation: hs-up 0.8s 1.0s cubic-bezier(0.22,1,0.36,1) both; }
 
-        .font-cormorant { font-family: 'Cormorant Garamond', serif; }
-        .font-jost      { font-family: 'Jost', sans-serif; }
+        /* ── Ping dot ── */
+        @keyframes hs-ping {
+          0%    { transform: scale(1);   opacity: 0.7; }
+          80%,100% { transform: scale(2.2); opacity: 0;   }
+        }
+        .hs-ping { animation: hs-ping 1.8s ease-out infinite; }
 
-        .btn-primary::before {
-          content: '';
+        /* ── Buttons ── */
+        .hs-btn-primary {
+          position: relative;
+          overflow: hidden;
+          transition: transform 0.35s ease, box-shadow 0.35s ease;
+          cursor: pointer;
+        }
+        .hs-btn-primary::before {
+          content: "";
           position: absolute;
           inset: 0;
-          background: #C59E2A;
+          background: var(--primary);
           transform: translateX(-101%);
-          transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+          transition: transform 0.42s cubic-bezier(0.22,1,0.36,1);
+          z-index: 0;
         }
-        .btn-primary:hover::before { transform: translateX(0); }
-        .btn-primary:hover          { color: #fff; }
+        .hs-btn-primary:hover::before { transform: translateX(0); }
+        .hs-btn-primary:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 14px 32px rgba(245,158,11,0.32);
+          color: #fff !important;
+          border-color: var(--primary) !important;
+        }
+        .hs-btn-primary > * { position: relative; z-index: 1; }
+
+        .hs-btn-outline {
+          position: relative;
+          overflow: hidden;
+          transition: transform 0.35s ease, box-shadow 0.35s ease;
+          cursor: pointer;
+        }
+        .hs-btn-outline::before {
+          content: "";
+          position: absolute;
+          inset: 0;
+          background: rgba(255,255,255,0.12);
+          transform: translateX(-101%);
+          transition: transform 0.42s cubic-bezier(0.22,1,0.36,1);
+          z-index: 0;
+        }
+        .hs-btn-outline:hover::before { transform: translateX(0); }
+        .hs-btn-outline:hover { transform: translateY(-3px); }
+        .hs-btn-outline > * { position: relative; z-index: 1; }
+
+        /* ── Search bar ── */
+        .hs-search-input {
+          outline: none;
+          transition: background 0.3s ease;
+        }
+        .hs-search-input:focus { background: rgba(255,255,255,0.18) !important; }
+
+        /* ── Stat cards ── */
+        .hs-stat {
+          transition: transform 0.35s ease;
+        }
+        .hs-stat:hover { transform: translateY(-4px); }
+
+        /* ── Scroll hint ── */
+        @keyframes hs-scroll {
+          0%,100% { transform: translateY(0);  opacity: 0.6; }
+          50%      { transform: translateY(6px); opacity: 1;   }
+        }
+        .hs-scroll-dot { animation: hs-scroll 1.8s ease-in-out infinite; }
       `}</style>
 
-      {/* ── Background ── */}
-      <div className="absolute inset-0">
+      {/* ── Background image ── */}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          overflow: "hidden",
+          zIndex: 0,
+        }}
+      >
         <img
           src="https://www.luxuryresidences.in/seo-assest/images/the-ark-voyage-banner.webp"
-          alt="Luxury Property"
-          className="w-full h-full object-cover animate-slowZoom"
+          alt="Premium Property"
+          className="hs-bg-img"
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            transformOrigin: "center",
+          }}
         />
-
-        {/* Cream wash */}
-        <div className="absolute inset-0 bg-[#faf8f3]/80" />
-
-        {/* Bottom fade */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#faf8f3] via-[#faf8f3]/50 to-[#faf8f3]/25" />
-
-        {/* Gold radial */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_88%_82%,rgba(197,158,42,0.14),transparent_50%)]" />
-
-        {/* Top-left white radial */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_15%_12%,rgba(255,255,255,0.55),transparent_45%)]" />
-
-        {/* Subtle grid */}
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.04)_1px,transparent_1px)] bg-[size:72px_72px]" />
+        {/* Multi-layer overlay */}
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            background:
+              "linear-gradient(110deg, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.45) 55%, rgba(0,0,0,0.22) 100%)",
+          }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            background:
+              "linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 50%)",
+          }}
+        />
       </div>
 
-      {/* ── Ambient Glows ── */}
-      <div className="animate-glowPulse absolute top-10 left-10 w-[300px] h-[300px] rounded-full bg-white/55 blur-[110px] pointer-events-none" />
-      <div className="animate-glowPulse-r absolute bottom-10 right-10 w-[260px] h-[260px] rounded-full bg-[rgba(197,158,42,0.10)] blur-[100px] pointer-events-none" />
+      {/* ── Decorative glows ── */}
+      <div style={{ position: "absolute", inset: 0, zIndex: 1, pointerEvents: "none", overflow: "hidden" }}>
+        {/* Orange top-left */}
+        <div style={{ position: "absolute", top: -100, left: -60, width: 400, height: 400, borderRadius: "50%", background: "rgba(245,158,11,0.18)", filter: "blur(120px)" }} />
+        {/* Blue bottom-right */}
+        <div style={{ position: "absolute", bottom: -120, right: -80, width: 450, height: 450, borderRadius: "50%", background: "rgba(15,61,145,0.22)", filter: "blur(140px)" }} />
+        {/* Accent green mid */}
+        <div style={{ position: "absolute", top: "42%", right: "16%", width: 150, height: 150, borderRadius: "50%", background: "rgba(63,163,77,0.14)", filter: "blur(80px)" }} />
 
-      {/* ── Decorative Rings ── */}
-      <div className="absolute top-[50px] right-[80px] w-[200px] h-[200px] rounded-full border border-[rgba(197,158,42,0.10)] rotate-[16deg] pointer-events-none" />
-      <div className="absolute bottom-[80px] left-[60px] w-[260px] h-[260px] rounded-full border border-[rgba(0,0,0,0.04)] rotate-[20deg] pointer-events-none" />
-      <div className="absolute top-[130px] right-[210px] w-[150px] h-[150px] rounded-full border border-[rgba(197,158,42,0.07)] -rotate-[12deg] pointer-events-none" />
+        {/* Grid lines */}
+        <div style={{
+          position: "absolute", inset: 0,
+          backgroundImage: "linear-gradient(rgba(255,255,255,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.025) 1px,transparent 1px)",
+          backgroundSize: "88px 88px",
+        }} />
 
-      {/* ── Main Content ── */}
-      <div className="relative z-10 min-h-screen flex items-center">
-        <div className="max-w-[1450px] mx-auto px-6 lg:px-14 w-full">
-          <div className="max-w-3xl pt-24">
+        {/* Decorative circles */}
+        <div style={{ position: "absolute", top: 120, right: 200, width: 240, height: 240, borderRadius: "50%", border: "1px solid rgba(255,255,255,0.07)" }} />
+        <div style={{ position: "absolute", top: 80, right: 160, width: 340, height: 340, borderRadius: "50%", border: "1px dashed rgba(245,158,11,0.1)" }} />
+        <div style={{ position: "absolute", bottom: 100, left: 80, width: 190, height: 190, borderRadius: "50%", border: "1px solid rgba(245,158,11,0.12)" }} />
+      </div>
 
-            {/* Badge */}
-            <div className="hero-animate delay-1 inline-flex items-center gap-3 px-[22px] py-2 rounded-full border border-black/9 bg-white/82 backdrop-blur-xl mb-9 relative">
-              <span className="absolute w-[13px] h-[13px] rounded-full bg-[rgba(197,158,42,0.22)] animate-ping-gold" />
-              <span className="relative w-[7px] h-[7px] rounded-full bg-[#C59E2A] shadow-[0_0_10px_1px_rgba(197,158,42,0.5)] flex-shrink-0" />
-              <span className="font-jost text-[10px] font-light tracking-[0.35em] uppercase text-black/48">
-                Luxury International Properties
-              </span>
+      {/* ── Main content ── */}
+      <div
+        className="hs"
+        style={{
+          position: "relative",
+          zIndex: 10,
+          maxWidth: 1200,
+          width: "100%",
+          margin: "0 auto",
+          padding: "0 28px",
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          paddingTop: 100,
+          paddingBottom: 60,
+        }}
+      >
+        <div style={{ maxWidth: 720 }}>
+
+          {/* Badge */}
+          <div
+            className="hs-d1"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 10,
+              padding: "8px 20px 8px 14px",
+              borderRadius: 100,
+              background: "rgba(255,255,255,0.07)",
+              border: "1px solid rgba(255,255,255,0.13)",
+              backdropFilter: "blur(12px)",
+              marginBottom: 28,
+            }}
+          >
+            <div style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <span
+                className="hs-ping"
+                style={{
+                  position: "absolute",
+                  width: 16,
+                  height: 16,
+                  borderRadius: "50%",
+                  background: "rgba(245,158,11,0.3)",
+                }}
+              />
+              <span style={{ position: "relative", width: 7, height: 7, borderRadius: "50%", background: "var(--primary)", display: "inline-block" }} />
             </div>
-
-            {/* Heading */}
-            <h1 className="font-cormorant hero-animate delay-2 text-[clamp(52px,8vw,108px)] leading-[0.88] tracking-[-0.03em] font-light">
-              <span className="block text-[#1a1612]/88 font-light">Discover</span>
-              <span className="block text-[#C59E2A] font-semibold">Premium Living</span>
-              <span className="block text-[#1a1612]/65 italic font-light">Across The World</span>
-            </h1>
-
-            {/* Divider */}
-            <div className="hero-animate delay-3 mt-7 w-[52px] h-px bg-gradient-to-r from-[#C59E2A] to-transparent" />
-
-            {/* Description */}
-            <p className="hero-animate delay-4 font-jost mt-7 text-[15px] font-light leading-[1.85] text-[#1a1612]/52 max-w-[440px] tracking-[0.01em]">
-              Explore iconic luxury residences, curated investment
-              opportunities, and world-class properties designed for
-              refined lifestyles.
-            </p>
-
-            {/* Buttons */}
-            <div className="hero-animate delay-5 mt-10 flex flex-wrap items-center gap-5">
-
-              {/* Primary */}
-              <button className="btn-primary relative overflow-hidden px-[34px] py-[14px] rounded-full border border-[#C59E2A] bg-transparent text-[#C59E2A] font-jost text-[11px] font-normal tracking-[0.2em] uppercase cursor-pointer transition-colors duration-[450ms]">
-                <span className="relative z-10 flex items-center gap-2">
-                  Explore Properties
-                  <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
-                    <path d="M1 10L10 1M10 1H3M10 1V8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </span>
-              </button>
-
-              {/* Secondary */}
-              <button className="font-jost px-[34px] py-[14px] rounded-full border border-black/12 bg-white/60 backdrop-blur-xl text-[#1a1612]/65 text-[11px] font-normal tracking-[0.2em] uppercase cursor-pointer transition-all duration-300 hover:bg-white/90 hover:border-black/18 hover:text-[#1a1612]/85">
-                Schedule Consultation
-              </button>
-
-            </div>
+            <span
+              style={{
+                fontFamily: "'DM Sans', sans-serif",
+                fontSize: 10,
+                letterSpacing: "0.35em",
+                textTransform: "uppercase",
+                color: "rgba(255,255,255,0.72)",
+                fontWeight: 500,
+              }}
+            >
+              A Step For Future Properties
+            </span>
           </div>
+
+          {/* Heading */}
+          <h1
+            className="hs-d2"
+            style={{
+              fontFamily: "'Cormorant Garamond', serif",
+              fontSize: "clamp(3.6rem, 7vw, 7.2rem)",
+              lineHeight: 0.9,
+              letterSpacing: "-0.04em",
+              margin: 0,
+              display: "flex",
+              flexDirection: "column",
+              gap: 6,
+            }}
+          >
+            <span style={{ fontWeight: 300, color: "rgba(255,255,255,0.95)" }}>
+              Find Your
+            </span>
+            <span style={{ fontWeight: 600, color: "var(--primary)" }}>
+              Dream Property
+            </span>
+            <span style={{ fontWeight: 300, fontStyle: "italic", color: "rgba(255,255,255,0.72)" }}>
+              For A Better Future
+            </span>
+          </h1>
+
+          {/* Divider */}
+          <div
+            className="hs-d3"
+            style={{
+              width: 70,
+              height: 2,
+              borderRadius: 2,
+              background: "linear-gradient(to right, var(--primary), transparent)",
+              marginTop: 28,
+            }}
+          />
+
+          {/* Description */}
+          <p
+            className="hs-d4"
+            style={{
+              fontFamily: "'DM Sans', sans-serif",
+              marginTop: 24,
+              fontSize: 16,
+              lineHeight: 1.9,
+              color: "rgba(255,255,255,0.72)",
+              maxWidth: 560,
+            }}
+          >
+            Experience premium real estate with luxury homes, smart investments,
+            and modern living spaces crafted for comfort, elegance, and long-term value.
+          </p>
+
+          {/* Buttons */}
+          <div
+            className="hs-d5"
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              alignItems: "center",
+              gap: 12,
+              marginTop: 36,
+            }}
+          >
+            <button
+              className="hs-btn-primary"
+              style={{
+                padding: "14px 30px",
+                borderRadius: 100,
+                border: "1px solid var(--primary)",
+                background: "transparent",
+                color: "var(--primary)",
+                fontFamily: "'DM Sans', sans-serif",
+                fontSize: 11,
+                fontWeight: 500,
+                letterSpacing: "0.22em",
+                textTransform: "uppercase",
+                display: "flex",
+                alignItems: "center",
+                gap: 8,
+              }}
+            >
+              <span>Explore Properties</span>
+              <ArrowUpRight size={14} />
+            </button>
+
+            <button
+              className="hs-btn-outline"
+              style={{
+                padding: "14px 30px",
+                borderRadius: 100,
+                border: "1px solid rgba(255,255,255,0.22)",
+                background: "rgba(255,255,255,0.07)",
+                backdropFilter: "blur(10px)",
+                color: "rgba(255,255,255,0.85)",
+                fontFamily: "'DM Sans', sans-serif",
+                fontSize: 11,
+                fontWeight: 500,
+                letterSpacing: "0.22em",
+                textTransform: "uppercase",
+                display: "flex",
+                alignItems: "center",
+                gap: 8,
+              }}
+            >
+              <Calendar size={14} />
+              <span>Schedule Consultation</span>
+            </button>
+          </div>
+
+         
+        </div>
+
+      
+      </div>
+
+      {/* ── Scroll hint ── */}
+      <div
+        style={{
+          position: "absolute",
+          bottom: 32,
+          left: "50%",
+          transform: "translateX(-50%)",
+          zIndex: 10,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: 6,
+        }}
+      >
+        <span
+          style={{
+            fontFamily: "'DM Sans', sans-serif",
+            fontSize: 9,
+            letterSpacing: "0.3em",
+            textTransform: "uppercase",
+            color: "rgba(255,255,255,0.35)",
+          }}
+        >
+          Scroll
+        </span>
+        <div
+          style={{
+            width: 1,
+            height: 40,
+            background: "linear-gradient(to bottom, rgba(255,255,255,0.35), transparent)",
+            position: "relative",
+          }}
+        >
+          <div
+            className="hs-scroll-dot"
+            style={{
+              position: "absolute",
+              top: 0,
+              left: "50%",
+              transform: "translateX(-50%)",
+              width: 5,
+              height: 5,
+              borderRadius: "50%",
+              background: "var(--primary)",
+            }}
+          />
         </div>
       </div>
-
-  
     </section>
   );
 }

@@ -1,183 +1,404 @@
 "use client";
 
-import {
-  Home,
-  Building2,
-  Trees,
-  MapPin,
-} from "lucide-react";
+import { Home, Building2, Trees, MapPin, ArrowUpRight } from "lucide-react";
 
 const categories = [
   {
     title: "Luxury Villas",
-    desc: "Premium villas with modern amenities",
+    desc: "Premium villas with modern amenities and serene surroundings.",
     icon: Home,
-    image:
-      "https://images.unsplash.com/photo-1613977257363-707ba9348227?w=900",
+    image: "https://images.unsplash.com/photo-1613977257363-707ba9348227?w=900",
+    count: "240+ Listings",
   },
   {
     title: "Apartments",
-    desc: "Comfortable city living spaces",
+    desc: "Comfortable city living spaces with premium urban access.",
     icon: Building2,
-    image:
-      "https://images.unsplash.com/photo-1502672023488-70e25813eb80?w=900",
+    image: "https://images.unsplash.com/photo-1502672023488-70e25813eb80?w=900",
+    count: "580+ Listings",
   },
   {
     title: "Plots",
-    desc: "Secure land investment opportunities",
+    desc: "Secure land investment opportunities in prime locations.",
     icon: MapPin,
-    image:
-      "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=900",
+    image: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=900",
+    count: "320+ Listings",
   },
   {
     title: "Farmhouses",
-    desc: "Peaceful countryside lifestyle",
+    desc: "Peaceful countryside lifestyle with expansive green spaces.",
     icon: Trees,
-    image:
-      "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=900",
+    image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=900",
+    count: "110+ Listings",
   },
 ];
 
 export default function PropertyCategories() {
   return (
-    <section className="relative py-24 bg-[#fbf7f0] overflow-hidden font-body">
-
-      {/* ✨ Fonts + Animations */}
+    <section
+      style={{
+        position: "relative",
+        padding: "96px 0",
+        background: "var(--background)",
+        overflow: "hidden",
+      }}
+    >
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Jost:wght@300;400;500&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap');
 
-        .font-heading { font-family: 'Cormorant Garamond', serif; }
-        .font-body { font-family: 'Jost', sans-serif; }
+        .pc * { box-sizing: border-box; }
 
-        @keyframes fadeUp {
-          from { opacity: 0; transform: translateY(25px); }
-          to { opacity: 1; transform: translateY(0); }
+        @keyframes pc-fadeUp {
+          from { opacity: 0; transform: translateY(22px); }
+          to   { opacity: 1; transform: translateY(0);    }
         }
 
-        .fade-up {
-          animation: fadeUp 0.8s ease forwards;
-        }
+        .pc-fade-up { animation: pc-fadeUp 0.75s cubic-bezier(0.22,1,0.36,1) forwards; }
 
-        .card {
-          transition: all 0.35s ease;
-        }
-
-        .card:hover {
-          transform: translateY(-10px);
-          box-shadow: 0 30px 70px rgba(0,0,0,0.12);
-        }
-
-        .shine {
+        .pc-card {
+          transition: var(--transition);
           position: relative;
           overflow: hidden;
         }
-
-        .shine::after {
-          content: "";
-          position: absolute;
-          top: 0;
-          left: -120%;
-          width: 60%;
-          height: 100%;
-          background: linear-gradient(120deg, transparent, rgba(255,255,255,0.35), transparent);
-          transition: 0.6s;
+        .pc-card:hover {
+          transform: translateY(-8px);
+          box-shadow: var(--shadow-md);
+        }
+        .pc-card:hover .pc-img {
+          transform: scale(1.08);
+        }
+        .pc-card:hover .pc-title {
+          color: var(--primary) !important;
+        }
+        .pc-card:hover .pc-bottom-line {
+          width: 100% !important;
+        }
+        .pc-card:hover .pc-arrow {
+          background: var(--primary) !important;
+          color: var(--white) !important;
+          border-color: var(--primary) !important;
+        }
+        .pc-card:hover .pc-icon-wrap {
+          background: var(--primary) !important;
+          color: var(--white) !important;
         }
 
-        .shine:hover::after {
-          left: 120%;
+        .pc-img {
+          transition: transform 0.75s cubic-bezier(0.22,1,0.36,1);
+          transform: scale(1.03);
+        }
+
+        .pc-bottom-line {
+          transition: width 0.5s cubic-bezier(0.22,1,0.36,1);
+        }
+
+        .pc-arrow {
+          transition: var(--transition);
+        }
+
+        .pc-icon-wrap {
+          transition: var(--transition);
         }
       `}</style>
 
-      {/* BACKGROUND DOTS */}
+      {/* ── Dot pattern ── */}
       <div
-        className="absolute inset-0 opacity-[0.18]"
         style={{
-          backgroundImage: "radial-gradient(#b88a44 1px, transparent 1px)",
-          backgroundSize: "24px 24px",
+          position: "absolute",
+          inset: 0,
+          opacity: 0.12,
+          backgroundImage: "radial-gradient(var(--primary) 1px, transparent 1px)",
+          backgroundSize: "26px 26px",
+          pointerEvents: "none",
         }}
       />
 
-      {/* GOLD GLOW */}
-      <div className="absolute top-[-200px] left-1/2 -translate-x-1/2 w-[700px] h-[700px] bg-[#b88a44]/10 blur-[140px] rounded-full" />
+      {/* ── Center glow ── */}
+      <div
+        style={{
+          position: "absolute",
+          top: -180,
+          left: "50%",
+          transform: "translateX(-50%)",
+          width: 640,
+          height: 640,
+          borderRadius: "50%",
+          background: "rgba(245,158,11,0.07)",
+          filter: "blur(130px)",
+          pointerEvents: "none",
+        }}
+      />
 
-      <div className="relative max-w-6xl mx-auto px-5">
+      <div
+        className="pc"
+        style={{ position: "relative", maxWidth: 1200, margin: "0 auto", padding: "0 28px" }}
+      >
 
-        {/* HEADER */}
-        <div className="text-center mb-14 fade-up">
+        {/* ── Header ── */}
+        <div
+          className="pc-fade-up"
+          style={{ textAlign: "center", marginBottom: 56 }}
+        >
+          {/* Badge */}
+          <div
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 8,
+              padding: "6px 16px 6px 10px",
+              borderRadius: 100,
+              background: "rgba(245,158,11,0.08)",
+              border: "1px solid rgba(245,158,11,0.22)",
+              marginBottom: 20,
+            }}
+          >
+            <span
+              style={{
+                width: 7,
+                height: 7,
+                borderRadius: "50%",
+                background: "var(--primary)",
+                display: "inline-block",
+              }}
+            />
+            <span
+              style={{
+                fontFamily: "'DM Sans', sans-serif",
+                fontSize: 10,
+                letterSpacing: "0.3em",
+                textTransform: "uppercase",
+                color: "var(--primary-dark)",
+                fontWeight: 500,
+              }}
+            >
+              Browse By Type
+            </span>
+          </div>
 
-          <h2 className="font-heading text-5xl lg:text-6xl font-semibold text-[#1f1f1f]">
-            Property Categories
+          <h2
+            style={{
+              fontFamily: "'Cormorant Garamond', serif",
+              fontSize: "clamp(3rem, 5.5vw, 5.4rem)",
+              lineHeight: 0.9,
+              letterSpacing: "-0.03em",
+              fontWeight: 300,
+              color: "var(--text)",
+              margin: 0,
+            }}
+          >
+            Property{" "}
+            <span
+              style={{
+                fontStyle: "italic",
+                fontWeight: 600,
+                color: "var(--primary)",
+              }}
+            >
+              Categories
+            </span>
           </h2>
 
-          <p className="mt-3 text-gray-600 text-base">
-            Discover premium spaces designed for modern living & investment
+          <p
+            style={{
+              fontFamily: "'DM Sans', sans-serif",
+              marginTop: 14,
+              fontSize: 14.5,
+              lineHeight: 1.8,
+              color: "var(--text-light)",
+              maxWidth: 460,
+              margin: "14px auto 0",
+            }}
+          >
+            Discover premium spaces crafted for modern living, smart investment, and refined lifestyles.
           </p>
-
         </div>
 
-        {/* GRID */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-7">
-
-          {categories.map((item, index) => {
+        {/* ── Grid ── */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))",
+            gap: 18,
+          }}
+        >
+          {categories.map((item, i) => {
             const Icon = item.icon;
-
             return (
               <div
-                key={index}
-                className="group card bg-white/80 backdrop-blur border border-[#d9c3a0]/25 rounded-3xl overflow-hidden"
+                key={i}
+                className="pc-card"
+                style={{
+                  borderRadius: 24,
+                  overflow: "hidden",
+                  background: "var(--white)",
+                  border: "1px solid var(--border)",
+                  boxShadow: "var(--shadow-sm)",
+                  cursor: "pointer",
+                }}
               >
-
-                {/* IMAGE */}
-                <div className="relative h-56 overflow-hidden">
-
+                {/* Image */}
+                <div style={{ position: "relative", height: 210, overflow: "hidden" }}>
                   <img
                     src={item.image}
-                    className="w-full h-full object-cover scale-105 group-hover:scale-110 transition duration-700"
                     alt={item.title}
+                    className="pc-img"
+                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
                   />
 
-                  {/* OVERLAY */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                  {/* Overlay */}
+                  <div
+                    style={{
+                      position: "absolute",
+                      inset: 0,
+                      background:
+                        "linear-gradient(to top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.1) 55%, transparent 100%)",
+                    }}
+                  />
 
-                  {/* ICON */}
-                  <div className="absolute top-4 left-4 w-11 h-11 flex items-center justify-center rounded-xl bg-white/90 backdrop-blur shadow-md">
-
-                    <Icon className="w-5 h-5 text-[#b88a44]" />
-
+                  {/* Icon */}
+                  <div
+                    className="pc-icon-wrap"
+                    style={{
+                      position: "absolute",
+                      top: 14,
+                      left: 14,
+                      width: 42,
+                      height: 42,
+                      borderRadius: 14,
+                      background: "rgba(255,255,255,0.92)",
+                      backdropFilter: "blur(10px)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      boxShadow: "var(--shadow-sm)",
+                      color: "var(--primary)",
+                    }}
+                  >
+                    <Icon size={18} />
                   </div>
 
+                  {/* Count pill */}
+                  <div
+                    style={{
+                      position: "absolute",
+                      bottom: 12,
+                      right: 12,
+                      background: "rgba(255,255,255,0.15)",
+                      backdropFilter: "blur(10px)",
+                      border: "1px solid rgba(255,255,255,0.22)",
+                      borderRadius: 100,
+                      padding: "3px 11px",
+                    }}
+                  >
+                    <span
+                      style={{
+                        fontFamily: "'DM Sans', sans-serif",
+                        fontSize: 10,
+                        color: "#fff",
+                        letterSpacing: "0.04em",
+                      }}
+                    >
+                      {item.count}
+                    </span>
+                  </div>
                 </div>
 
-                {/* CONTENT */}
-                <div className="p-5">
-
-                  <h3 className="font-heading text-lg font-semibold text-[#1f1f1f] group-hover:text-[#b88a44] transition">
+                {/* Content */}
+                <div style={{ padding: "18px 20px 20px" }}>
+                  <h3
+                    className="pc-title"
+                    style={{
+                      fontFamily: "'Cormorant Garamond', serif",
+                      fontSize: "1.4rem",
+                      fontWeight: 600,
+                      color: "var(--text)",
+                      margin: 0,
+                      letterSpacing: "-0.01em",
+                      transition: "var(--transition)",
+                    }}
+                  >
                     {item.title}
                   </h3>
 
-                  <p className="text-sm text-gray-600 mt-1 leading-6">
+                  {/* Divider */}
+                  <div
+                    style={{
+                      width: 30,
+                      height: 1,
+                      background: "linear-gradient(to right, var(--primary), transparent)",
+                      margin: "10px 0",
+                    }}
+                  />
+
+                  <p
+                    style={{
+                      fontFamily: "'DM Sans', sans-serif",
+                      fontSize: 13,
+                      lineHeight: 1.75,
+                      color: "var(--text-light)",
+                      margin: 0,
+                    }}
+                  >
                     {item.desc}
                   </p>
 
-                  {/* CTA */}
-                  <div className="mt-4 flex items-center text-sm font-medium text-[#b88a44]">
-
-                    Explore
-                    <span className="ml-2 group-hover:ml-3 transition-all duration-300">
-                      →
+                  {/* CTA row */}
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      marginTop: 16,
+                    }}
+                  >
+                    <span
+                      style={{
+                        fontFamily: "'DM Sans', sans-serif",
+                        fontSize: 11,
+                        letterSpacing: "0.18em",
+                        textTransform: "uppercase",
+                        color: "var(--primary)",
+                        fontWeight: 500,
+                      }}
+                    >
+                      Explore
                     </span>
 
+                    <div
+                      className="pc-arrow"
+                      style={{
+                        width: 32,
+                        height: 32,
+                        borderRadius: "50%",
+                        border: "1px solid var(--border)",
+                        background: "var(--background)",
+                        color: "var(--text-light)",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <ArrowUpRight size={14} />
+                    </div>
                   </div>
-
                 </div>
 
-                {/* GOLD LINE */}
-                <div className="absolute bottom-0 left-0 w-0 h-[3px] bg-[#b88a44] group-hover:w-full transition-all duration-500" />
-
+                {/* Bottom accent line */}
+                <div
+                  className="pc-bottom-line"
+                  style={{
+                    position: "absolute",
+                    bottom: 0,
+                    left: 0,
+                    width: 0,
+                    height: 3,
+                    background: "linear-gradient(to right, var(--primary), var(--primary-light))",
+                    borderRadius: "0 2px 0 0",
+                  }}
+                />
               </div>
             );
           })}
-
         </div>
 
       </div>

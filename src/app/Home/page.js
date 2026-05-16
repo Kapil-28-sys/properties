@@ -5,11 +5,13 @@ import PropertyCategories from "./PropertyCategories";
 import Testimonials from "./Testimonials";
 import WhyChooseUs from "./WhyChooseUs";
 import CTA from "./CTA";
+ 
 
 
 export default function Home() {
   return (
     <>
+     
       <HeroSection />
        <FeaturedProperties />
        <WhyChooseUs/>
