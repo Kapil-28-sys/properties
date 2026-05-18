@@ -31,170 +31,596 @@ export default function PropertyDetailsPage() {
 
   const [currentImage, setCurrentImage] = useState(0);
 
-  const nextSlide = () => {
+  const nextSlide = () =>
     setCurrentImage((prev) =>
       prev === property.images.length - 1 ? 0 : prev + 1
     );
-  };
 
-  const prevSlide = () => {
+  const prevSlide = () =>
     setCurrentImage((prev) =>
       prev === 0 ? property.images.length - 1 : prev - 1
     );
-  };
 
   return (
     <>
       <style jsx global>{`
-        @import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Jost:wght@300;400;500;600&display=swap");
+        @import url("https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@400;500;600;700&display=swap");
 
-        .font-heading {
-          font-family: "Cormorant Garamond", serif;
+        /* ── BASE ── */
+        .pdp-section {
+          background: var(--background);
+          min-height: 100vh;
+          font-family: "DM Sans", sans-serif;
+          color: var(--text);
         }
 
-        .font-body {
-          font-family: "Jost", sans-serif;
+        /* ── HERO ── */
+        .pdp-hero {
+          position: relative;
+          width: 100%;
+          height: 90vh;
+          overflow: hidden;
+        }
+
+        .pdp-hero-img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          display: block;
+          transition: transform 0.7s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .pdp-hero-dim {
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(
+            to top,
+            rgba(0, 0, 0, 0.72) 0%,
+            rgba(0, 0, 0, 0.25) 55%,
+            rgba(0, 0, 0, 0.05) 100%
+          );
+        }
+
+        /* hero content */
+        .pdp-hero-content {
+          position: absolute;
+          bottom: 72px;
+          left: 0;
+          width: 100%;
+          padding: 0 40px;
+          z-index: 10;
+        }
+
+        .pdp-hero-eyebrow {
+          display: inline-flex;
+          align-items: center;
+          gap: 10px;
+          margin-bottom: 18px;
+        }
+
+        .pdp-hero-eyebrow-line {
+          width: 36px;
+          height: 2px;
+          background: var(--primary);
+          border-radius: 2px;
+        }
+
+        .pdp-hero-eyebrow-text {
+          color: var(--primary-light);
+          font-size: 10px;
+          letter-spacing: 4px;
+          text-transform: uppercase;
+          font-weight: 700;
+        }
+
+        .pdp-hero-title {
+          font-family: "DM Serif Display", serif;
+          font-size: 72px;
+          color: var(--white);
+          line-height: 1;
+          margin: 0 0 20px;
+          letter-spacing: -1.5px;
+        }
+
+        .pdp-hero-meta {
+          display: flex;
+          align-items: center;
+          flex-wrap: wrap;
+          gap: 20px;
+        }
+
+        .pdp-hero-location {
+          color: rgba(255, 255, 255, 0.82);
+          font-size: 16px;
+        }
+
+        .pdp-hero-divider {
+          width: 1px;
+          height: 22px;
+          background: rgba(255, 255, 255, 0.3);
+        }
+
+        .pdp-hero-price {
+          font-size: 22px;
+          font-weight: 700;
+          color: var(--primary-light);
+          font-family: "DM Sans", sans-serif;
+        }
+
+        /* slider buttons */
+        .pdp-slider-btn {
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          z-index: 20;
+          width: 52px;
+          height: 52px;
+          border-radius: 50%;
+          border: 1.5px solid rgba(255, 255, 255, 0.3);
+          background: rgba(255, 255, 255, 0.12);
+          backdrop-filter: blur(10px);
+          color: var(--white);
+          font-size: 20px;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: var(--transition);
+        }
+
+        .pdp-slider-btn:hover {
+          background: var(--primary);
+          border-color: var(--primary);
+          transform: translateY(-50%) scale(1.08);
+        }
+
+        .pdp-slider-prev { left: 22px; }
+        .pdp-slider-next { right: 22px; }
+
+        /* thumbnails */
+        .pdp-thumbs {
+          position: absolute;
+          bottom: 22px;
+          right: 22px;
+          z-index: 20;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+        }
+
+        .pdp-thumb-btn {
+          width: 76px;
+          height: 76px;
+          border-radius: 14px;
+          overflow: hidden;
+          border: 2.5px solid transparent;
+          padding: 0;
+          cursor: pointer;
+          transition: var(--transition);
+          opacity: 0.65;
+        }
+
+        .pdp-thumb-btn.active {
+          border-color: var(--primary);
+          opacity: 1;
+          transform: scale(1.06);
+        }
+
+        .pdp-thumb-btn img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          display: block;
+        }
+
+        /* ── MAIN BODY ── */
+        .pdp-body {
+          max-width: 1440px;
+          margin: 0 auto;
+          padding: 72px 40px;
+        }
+
+        .pdp-layout {
+          display: grid;
+          grid-template-columns: 1.7fr 0.9fr;
+          gap: 28px;
+          align-items: start;
+        }
+
+        /* ── CARDS ── */
+        .pdp-card {
+          background: var(--white);
+          border: 1px solid var(--border);
+          border-radius: var(--radius);
+          padding: 36px;
+          box-shadow: var(--shadow-sm);
+        }
+
+        .pdp-card + .pdp-card {
+          margin-top: 24px;
+        }
+
+        /* section label */
+        .pdp-label {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          margin-bottom: 14px;
+        }
+
+        .pdp-label-dot {
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          background: var(--primary);
+          flex-shrink: 0;
+        }
+
+        .pdp-label-text {
+          font-size: 10px;
+          font-weight: 700;
+          letter-spacing: 3.5px;
+          text-transform: uppercase;
+          color: var(--primary-dark);
+          font-family: "DM Sans", sans-serif;
+        }
+
+        /* card headings */
+        .pdp-card-heading {
+          font-family: "DM Serif Display", serif;
+          font-size: 42px;
+          color: var(--text);
+          margin: 0 0 20px;
+          letter-spacing: -0.5px;
+          line-height: 1.05;
+        }
+
+        .pdp-card-para {
+          color: var(--text-light);
+          line-height: 1.9;
+          font-size: 15px;
+        }
+
+        /* property detail tiles */
+        .pdp-details-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 14px;
+        }
+
+        .pdp-detail-tile {
+          border: 1px solid var(--border);
+          border-radius: 14px;
+          padding: 18px 20px;
+          transition: var(--transition);
+        }
+
+        .pdp-detail-tile:hover {
+          border-color: var(--secondary-light);
+          box-shadow: var(--shadow-sm);
+        }
+
+        .pdp-detail-key {
+          font-size: 10px;
+          text-transform: uppercase;
+          letter-spacing: 2px;
+          color: var(--text-light);
+          font-weight: 600;
+          margin-bottom: 6px;
+        }
+
+        .pdp-detail-val {
+          font-size: 15px;
+          font-weight: 600;
+          color: var(--text);
+        }
+
+        /* amenity chips */
+        .pdp-amenities-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 12px;
+        }
+
+        .pdp-amenity {
+          background: var(--background);
+          border: 1px solid var(--border);
+          border-radius: 12px;
+          padding: 14px 16px;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          transition: var(--transition);
+        }
+
+        .pdp-amenity:hover {
+          border-color: var(--primary);
+          background: var(--white);
+        }
+
+        .pdp-amenity-dot {
+          width: 7px;
+          height: 7px;
+          border-radius: 50%;
+          background: var(--secondary);
+          flex-shrink: 0;
+        }
+
+        .pdp-amenity-text {
+          font-size: 13.5px;
+          font-weight: 500;
+          color: var(--text);
+        }
+
+        /* ── RIGHT SIDEBAR / FORM ── */
+        .pdp-sidebar {
+          position: sticky;
+          top: 24px;
+        }
+
+        .pdp-form-card {
+          background: var(--white);
+          border: 1px solid var(--border);
+          border-radius: var(--radius);
+          padding: 36px;
+          box-shadow: var(--shadow-sm);
+        }
+
+        .pdp-form-title {
+          font-family: "DM Serif Display", serif;
+          font-size: 38px;
+          color: var(--text);
+          margin: 0 0 6px;
+          line-height: 1.1;
+        }
+
+        .pdp-form-sub {
+          color: var(--text-light);
+          font-size: 14px;
+          margin-bottom: 28px;
+          line-height: 1.6;
+        }
+
+        /* form fields */
+        .pdp-field {
+          margin-bottom: 16px;
+        }
+
+        .pdp-field label {
+          display: block;
+          font-size: 12px;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 1.5px;
+          color: var(--text-light);
+          margin-bottom: 8px;
+        }
+
+        .pdp-input,
+        .pdp-textarea {
+          width: 100%;
+          border: 1.5px solid var(--border);
+          border-radius: 12px;
+          background: var(--background);
+          color: var(--text);
+          font-family: "DM Sans", sans-serif;
+          font-size: 14px;
+          outline: none;
+          transition: var(--transition);
+        }
+
+        .pdp-input {
+          height: 52px;
+          padding: 0 18px;
+        }
+
+        .pdp-textarea {
+          padding: 14px 18px;
+          resize: none;
+          height: 120px;
+        }
+
+        .pdp-input::placeholder,
+        .pdp-textarea::placeholder {
+          color: var(--text-light);
+          opacity: 0.7;
+        }
+
+        .pdp-input:focus,
+        .pdp-textarea:focus {
+          border-color: var(--secondary-light);
+          background: var(--white);
+          box-shadow: 0 0 0 4px rgba(15, 61, 145, 0.06);
+        }
+
+        /* submit btn */
+        .pdp-submit-btn {
+          width: 100%;
+          height: 52px;
+          border-radius: 12px;
+          border: none;
+          background: var(--secondary);
+          color: var(--white);
+          font-family: "DM Sans", sans-serif;
+          font-size: 14px;
+          font-weight: 700;
+          letter-spacing: 0.5px;
+          cursor: pointer;
+          transition: var(--transition);
+          margin-top: 4px;
+        }
+
+        .pdp-submit-btn:hover {
+          background: var(--secondary-dark);
+          transform: translateY(-2px);
+          box-shadow: var(--shadow-md);
+        }
+
+        /* quick info strip */
+        .pdp-quick-info {
+          margin-top: 28px;
+          padding-top: 24px;
+          border-top: 1px solid var(--border);
+          display: flex;
+          flex-direction: column;
+          gap: 14px;
+        }
+
+        .pdp-qi-row {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+
+        .pdp-qi-label {
+          font-size: 13px;
+          color: var(--text-light);
+        }
+
+        .pdp-qi-value {
+          font-size: 14px;
+          font-weight: 600;
+          color: var(--text);
+        }
+
+        .pdp-qi-value.available {
+          color: var(--accent);
+          background: rgba(63, 163, 77, 0.08);
+          border-radius: 999px;
+          padding: 3px 12px;
+          font-size: 12px;
+          font-weight: 700;
+          letter-spacing: 0.5px;
+        }
+
+        .pdp-qi-value.price-val {
+          color: var(--primary-dark);
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 1024px) {
+          .pdp-layout {
+            grid-template-columns: 1fr;
+          }
+
+          .pdp-sidebar {
+            position: static;
+          }
+
+          .pdp-hero-title { font-size: 52px; }
+        }
+
+        @media (max-width: 767px) {
+          .pdp-hero-content { padding: 0 20px; bottom: 80px; }
+          .pdp-hero-title { font-size: 36px; }
+          .pdp-body { padding: 48px 18px; }
+          .pdp-card { padding: 24px; }
+          .pdp-form-card { padding: 24px; }
+          .pdp-details-grid { grid-template-columns: 1fr; }
+          .pdp-amenities-grid { grid-template-columns: 1fr 1fr; }
+          .pdp-thumbs { display: none; }
+          .pdp-card-heading { font-size: 32px; }
         }
 
         @keyframes fadeUp {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
+          from { opacity: 0; transform: translateY(22px); }
+          to   { opacity: 1; transform: translateY(0); }
         }
 
-        .fade-up {
-          animation: fadeUp 0.8s ease forwards;
+        .pdp-fadein {
+          animation: fadeUp 0.7s ease forwards;
         }
       `}</style>
 
-      <section className="bg-[#f8f5ef] min-h-screen font-body">
-        {/* HERO SECTION */}
-        <div className="relative w-full h-[90vh] overflow-hidden">
+      <section className="pdp-section">
+
+        {/* ── HERO ── */}
+        <div className="pdp-hero">
           <img
             src={property.images[currentImage]}
             alt="Property"
-            className="w-full h-full object-cover"
+            className="pdp-hero-img"
           />
+          <div className="pdp-hero-dim" />
 
-          <div className="absolute inset-0 bg-black/40"></div>
-
-          {/* CONTENT */}
-          <div className="absolute bottom-16 left-0 w-full px-4 md:px-10 lg:px-16 z-10">
-            <div className="max-w-7xl mx-auto">
-              <p className="uppercase tracking-[4px] text-white text-sm mb-4">
-                Premium Property
-              </p>
-
-              <h1 className="text-5xl md:text-7xl text-white font-heading mb-5 leading-none">
-                {property.title}
-              </h1>
-
-              <div className="flex flex-wrap items-center gap-6">
-                <p className="text-white text-lg">{property.location}</p>
-
-                <div className="w-[1px] h-6 bg-white/40"></div>
-
-                <p className="text-2xl text-white font-semibold">
-                  {property.price}
-                </p>
-              </div>
+          {/* content */}
+          <div className="pdp-hero-content">
+            <div className="pdp-hero-eyebrow">
+              <div className="pdp-hero-eyebrow-line" />
+              <span className="pdp-hero-eyebrow-text">Premium Property</span>
+            </div>
+            <h1 className="pdp-hero-title">{property.title}</h1>
+            <div className="pdp-hero-meta">
+              <span className="pdp-hero-location">{property.location}</span>
+              <div className="pdp-hero-divider" />
+              <span className="pdp-hero-price">{property.price}</span>
             </div>
           </div>
 
-          {/* SLIDER BUTTONS */}
-          <button
-            onClick={prevSlide}
-            className="absolute left-5 top-1/2 -translate-y-1/2 z-20 w-14 h-14 rounded-full bg-white/20 backdrop-blur-md text-white text-2xl hover:bg-white hover:text-black transition-all"
-          >
-            ←
-          </button>
+          {/* slider controls */}
+          <button onClick={prevSlide} className="pdp-slider-btn pdp-slider-prev">←</button>
+          <button onClick={nextSlide} className="pdp-slider-btn pdp-slider-next">→</button>
 
-          <button
-            onClick={nextSlide}
-            className="absolute right-5 top-1/2 -translate-y-1/2 z-20 w-14 h-14 rounded-full bg-white/20 backdrop-blur-md text-white text-2xl hover:bg-white hover:text-black transition-all"
-          >
-            →
-          </button>
-
-          {/* THUMBNAILS */}
-          <div className="absolute bottom-6 right-6 z-20 flex items-center gap-3">
-            {property.images.map((img, index) => (
+          {/* thumbnails */}
+          <div className="pdp-thumbs">
+            {property.images.map((img, i) => (
               <button
-                key={index}
-                onClick={() => setCurrentImage(index)}
-                className={`w-20 h-20 rounded-2xl overflow-hidden border-2 ${
-                  currentImage === index
-                    ? "border-white scale-105"
-                    : "border-transparent opacity-70"
-                }`}
+                key={i}
+                onClick={() => setCurrentImage(i)}
+                className={`pdp-thumb-btn ${currentImage === i ? "active" : ""}`}
               >
-                <img
-                  src={img}
-                  alt="thumb"
-                  className="w-full h-full object-cover"
-                />
+                <img src={img} alt={`thumb-${i}`} />
               </button>
             ))}
           </div>
         </div>
 
-        {/* MAIN SECTION */}
-        <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16 py-20 ">
-          <div className="grid lg:grid-cols-[1.7fr_0.9fr] gap-12">
-            {/* LEFT SIDE - PROPERTY DETAILS */}
-            <div className="space-y-10 fade-up">
-              {/* ABOUT */}
-              <div className="bg-white rounded-[32px] p-8 border border-[#e5ded2]">
-                <p className="uppercase tracking-[4px] text-sm text-black mb-3">
-                  About Property
-                </p>
+        {/* ── BODY ── */}
+        <div className="pdp-body">
+          <div className="pdp-layout">
 
-                <h2 className="text-5xl font-heading text-black mb-6">
-                  Modern Luxury Living Experience
-                </h2>
+            {/* LEFT */}
+            <div className="pdp-fadein">
 
-                <p className="text-black/70 leading-[2] text-lg">
-                  {property.description}
-                </p>
+              {/* About */}
+              <div className="pdp-card">
+                <div className="pdp-label">
+                  <div className="pdp-label-dot" />
+                  <span className="pdp-label-text">About Property</span>
+                </div>
+                <h2 className="pdp-card-heading">Modern Luxury<br />Living Experience</h2>
+                <p className="pdp-card-para">{property.description}</p>
               </div>
 
-              {/* PROPERTY DETAILS */}
-              <div className="bg-white rounded-[32px] p-8 border border-[#e5ded2] mt-5">
-                <h3 className="text-4xl font-heading mb-8 text-black">
-                  Property Details
+              {/* Property Details */}
+              <div className="pdp-card">
+                <div className="pdp-label">
+                  <div className="pdp-label-dot" />
+                  <span className="pdp-label-text">Property Details</span>
+                </div>
+                <h3 className="pdp-card-heading" style={{ fontSize: "34px" }}>
+                  Specifications
                 </h3>
-
-                <div className="grid md:grid-cols-2 gap-6">
+                <div className="pdp-details-grid">
                   {Object.entries(property.details).map(([key, value]) => (
-                    <div
-                      key={key}
-                      className="border border-[#ebe4d8] rounded-2xl p-5"
-                    >
-                      <p className="text-sm uppercase tracking-[2px] text-black/50 mb-2">
-                        {key}
-                      </p>
-
-                      <p className="text-lg font-medium text-black">
-                        {value}
-                      </p>
+                    <div key={key} className="pdp-detail-tile">
+                      <div className="pdp-detail-key">{key}</div>
+                      <div className="pdp-detail-val">{value}</div>
                     </div>
                   ))}
                 </div>
               </div>
 
-              {/* FEATURES */}
-              <div className="bg-white rounded-[32px] p-8 border border-[#e5ded2] mt-5">
-                <h3 className="text-4xl font-heading mb-8 text-black">
-                  Features & Amenities
+              {/* Amenities */}
+              <div className="pdp-card">
+                <div className="pdp-label">
+                  <div className="pdp-label-dot" />
+                  <span className="pdp-label-text">Features & Amenities</span>
+                </div>
+                <h3 className="pdp-card-heading" style={{ fontSize: "34px" }}>
+                  What's Included
                 </h3>
-
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-5">
+                <div className="pdp-amenities-grid">
                   {[
                     "Swimming Pool",
                     "Private Garden",
@@ -205,111 +631,69 @@ export default function PropertyDetailsPage() {
                     "Modern Kitchen",
                     "Security System",
                     "Luxury Interiors",
-                  ].map((feature, index) => (
-                    <div
-                      key={index}
-                      className="bg-[#f8f5ef] rounded-2xl p-5"
-                    >
-                      <p className="text-black font-medium">{feature}</p>
+                  ].map((feature) => (
+                    <div key={feature} className="pdp-amenity">
+                      <div className="pdp-amenity-dot" />
+                      <span className="pdp-amenity-text">{feature}</span>
                     </div>
                   ))}
                 </div>
               </div>
             </div>
 
-            {/* RIGHT SIDE - BUYER FORM */}
-            <div className="fade-up">
-              <div className="bg-white rounded-[32px] p-8 border border-[#e5ded2] sticky top-10">
-                <h3 className="text-4xl font-heading text-black mb-2">
-                  Interested?
-                </h3>
-
-                <p className="text-black/60 mb-8">
+            {/* RIGHT — sticky form */}
+            <div className="pdp-sidebar pdp-fadein">
+              <div className="pdp-form-card">
+                <h3 className="pdp-form-title">Interested?</h3>
+                <p className="pdp-form-sub">
                   Fill the form and our agent will contact you shortly.
                 </p>
 
-                <form className="space-y-5">
-                  <div>
-                    <label className="text-sm text-black/70 mb-2 block">
-                      Full Name
-                    </label>
-
-                    <input
-                      type="text"
-                      placeholder="Enter your name"
-                      className="w-full h-14 px-5 rounded-2xl border border-[#ddd] outline-none focus:border-black bg-[#fafafa]"
-                    />
+                <div>
+                  <div className="pdp-field">
+                    <label>Full Name</label>
+                    <input type="text" className="pdp-input" placeholder="Enter your name" />
                   </div>
 
-                  <div>
-                    <label className="text-sm text-black/70 mb-2 block">
-                      Phone Number
-                    </label>
-
-                    <input
-                      type="text"
-                      placeholder="Enter phone number"
-                      className="w-full h-14 px-5 rounded-2xl border border-[#ddd] outline-none focus:border-black bg-[#fafafa]"
-                    />
+                  <div className="pdp-field">
+                    <label>Phone Number</label>
+                    <input type="text" className="pdp-input" placeholder="Enter phone number" />
                   </div>
 
-                  <div>
-                    <label className="text-sm text-black/70 mb-2 block">
-                      Email Address
-                    </label>
-
-                    <input
-                      type="email"
-                      placeholder="Enter email"
-                      className="w-full h-14 px-5 rounded-2xl border border-[#ddd] outline-none focus:border-black bg-[#fafafa]"
-                    />
+                  <div className="pdp-field">
+                    <label>Email Address</label>
+                    <input type="email" className="pdp-input" placeholder="Enter email" />
                   </div>
 
-                  <div>
-                    <label className="text-sm text-black/70 mb-2 block">
-                      Message
-                    </label>
-
+                  <div className="pdp-field">
+                    <label>Message</label>
                     <textarea
-                      rows="5"
+                      className="pdp-textarea"
                       placeholder="I am interested in this property..."
-                      className="w-full p-5 rounded-2xl border border-[#ddd] outline-none focus:border-black bg-[#fafafa] resize-none"
-                    ></textarea>
+                    />
                   </div>
 
-                  <button className="w-full h-14 rounded-2xl bg-black text-white text-sm font-medium hover:bg-[#2a2a2a] transition-all duration-300">
-                    Submit Enquiry
-                  </button>
-                </form>
+                  <button className="pdp-submit-btn">Submit Enquiry</button>
+                </div>
 
-                {/* QUICK INFO */}
-                <div className="mt-10 pt-8 border-t border-[#ece6da] space-y-4">
-                  <div className="flex items-center justify-between">
-                    <span className="text-black/60">Price</span>
-
-                    <span className="font-semibold text-black">
-                      {property.price}
-                    </span>
+                {/* Quick info */}
+                <div className="pdp-quick-info">
+                  <div className="pdp-qi-row">
+                    <span className="pdp-qi-label">Price</span>
+                    <span className="pdp-qi-value price-val">{property.price}</span>
                   </div>
-
-                  <div className="flex items-center justify-between">
-                    <span className="text-black/60">Type</span>
-
-                    <span className="font-semibold text-black">
-                      Villa
-                    </span>
+                  <div className="pdp-qi-row">
+                    <span className="pdp-qi-label">Type</span>
+                    <span className="pdp-qi-value">Villa</span>
                   </div>
-
-                  <div className="flex items-center justify-between">
-                    <span className="text-black/60">Status</span>
-
-                    <span className="font-semibold text-green-600">
-                      Available
-                    </span>
+                  <div className="pdp-qi-row">
+                    <span className="pdp-qi-label">Status</span>
+                    <span className="pdp-qi-value available">Available</span>
                   </div>
                 </div>
               </div>
             </div>
+
           </div>
         </div>
       </section>

@@ -71,7 +71,7 @@ const locations = [
     beds: "3-4",
     image:
       "https://images.unsplash.com/photo-1494526585095-c41746248156?q=80&w=1600&auto=format&fit=crop",
-    size: "tall",
+    size: "medium",
   },
 ];
 
@@ -90,12 +90,8 @@ export default function PropertyLocationGrid() {
 
   const filtered = useMemo(() => {
     return locations.filter((item) => {
-      const q = item.title
-        .toLowerCase()
-        .includes(search.toLowerCase());
-
+      const q = item.title.toLowerCase().includes(search.toLowerCase());
       const t = type === "All" || item.type === type;
-
       return q && t;
     });
   }, [search, type]);
@@ -103,344 +99,365 @@ export default function PropertyLocationGrid() {
   return (
     <>
       <style jsx global>{`
-        @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap");
-
-        .property-section {
-          background: #f7f5f1;
+       
+        .plg-section {
+          background: var(--background);
           padding: 90px 0;
           overflow: hidden;
-          font-family: "Inter", sans-serif;
+          font-family: "DM Sans", sans-serif;
         }
 
-        .property-container {
-          max-width: 1500px;
+        .plg-container {
+          max-width: 1440px;
           margin: auto;
-          padding: 0 24px;
+          padding: 0 32px;
         }
 
-        .top-badge {
+        /* ── HEADER ── */
+        .plg-eyebrow {
           display: inline-flex;
           align-items: center;
           gap: 10px;
-          margin-bottom: 24px;
+          margin-bottom: 20px;
         }
 
-        .top-line {
-          width: 50px;
-          height: 1px;
-          background: #b8912a;
+        .plg-eyebrow-line {
+          width: 44px;
+          height: 2px;
+          background: var(--primary);
+          border-radius: 2px;
         }
 
-        .top-text {
-          color: #b8912a;
-          letter-spacing: 4px;
+        .plg-eyebrow-text {
+          color: var(--primary-dark);
+          letter-spacing: 3px;
           font-size: 11px;
           font-weight: 700;
           text-transform: uppercase;
+          font-family: "DM Sans", sans-serif;
         }
 
-        .hero-title {
-          font-family: "Playfair Display", serif;
-          font-size: 84px;
-          line-height: 0.95;
-          color: #141414;
-          margin-bottom: 0;
-          letter-spacing: -2px;
+        .plg-hero-title {
+          font-family: "DM Serif Display", serif;
+          font-size: 72px;
+          line-height: 1;
+          color: var(--text);
+          margin: 0;
+          letter-spacing: -1.5px;
         }
 
-        .hero-title span {
-          color: #b8912a;
+        .plg-hero-title em {
+          color: var(--primary);
           font-style: italic;
         }
 
-        .hero-para {
-          color: #847a68;
+        .plg-hero-para {
+          color: var(--text-light);
           font-size: 15px;
           line-height: 1.8;
-          max-width: 320px;
+          max-width: 300px;
           margin-left: auto;
+          font-family: "DM Sans", sans-serif;
         }
 
-        .filter-box {
-          background: rgba(255, 255, 255, 0.9);
-          backdrop-filter: blur(18px);
-          border: 1px solid #ece4d7;
-          border-radius: 34px;
-          padding: 34px;
-          margin-top: 60px;
-          margin-bottom: 60px;
-          box-shadow: 0 25px 60px rgba(0, 0, 0, 0.05);
+        /* ── FILTER BOX ── */
+        .plg-filter-box {
+          background: var(--white);
+          border: 1px solid var(--border);
+          border-radius: var(--radius);
+          padding: 28px 32px;
+          margin-top: 52px;
+          margin-bottom: 52px;
+          box-shadow: var(--shadow-sm);
         }
 
-        .chip {
-          border: 1px solid #e8dfd1;
-          background: #fff;
-          color: #6f675a;
+        .plg-chip {
+          border: 1.5px solid var(--border);
+          background: var(--white);
+          color: var(--text-light);
           border-radius: 999px;
-          padding: 11px 20px;
+          padding: 9px 20px;
           font-size: 13px;
           font-weight: 600;
-          transition: 0.3s;
+          font-family: "DM Sans", sans-serif;
+          transition: var(--transition);
           cursor: pointer;
         }
 
-        .chip.active {
-          background: linear-gradient(135deg, #b8912a, #d4ae45);
-          border-color: transparent;
-          color: white;
-          box-shadow: 0 12px 30px rgba(184, 145, 42, 0.25);
+        .plg-chip.active,
+        .plg-chip:hover {
+          background: var(--secondary);
+          border-color: var(--secondary);
+          color: var(--white);
+          box-shadow: var(--shadow-sm);
         }
 
-        .search-wrap {
+        .plg-search-wrap {
           position: relative;
         }
 
-        .search-icon {
+        .plg-search-icon {
           position: absolute;
           left: 18px;
           top: 50%;
           transform: translateY(-50%);
           width: 18px;
           height: 18px;
-          color: #b8912a;
+          color: var(--primary);
         }
 
-        .search-input {
+        .plg-search-input {
           width: 100%;
-          height: 62px;
-          border-radius: 18px;
-          border: 1px solid #e8dfd1;
-          background: white;
-          padding: 0 20px 0 52px;
+          height: 56px;
+          border-radius: var(--radius);
+          border: 1.5px solid var(--border);
+          background: var(--background);
+          padding: 0 20px 0 50px;
           outline: none;
           font-size: 14px;
-          transition: 0.3s;
+          font-family: "DM Sans", sans-serif;
+          color: var(--text);
+          transition: var(--transition);
         }
 
-        .search-input:focus {
-          border-color: #b8912a;
-          box-shadow: 0 0 0 4px rgba(184, 145, 42, 0.08);
+        .plg-search-input::placeholder {
+          color: var(--text-light);
         }
 
-        .search-btn {
+        .plg-search-input:focus {
+          border-color: var(--secondary-light);
+          background: var(--white);
+          box-shadow: 0 0 0 4px rgba(15, 61, 145, 0.06);
+        }
+
+        .plg-search-btn {
           width: 100%;
-          height: 62px;
-          border-radius: 18px;
+          height: 56px;
+          border-radius: var(--radius);
           border: none;
-          background: linear-gradient(135deg, #b8912a, #d7b048);
-          color: white;
+          background: var(--secondary);
+          color: var(--white);
           font-weight: 700;
           font-size: 14px;
-          transition: 0.35s;
+          font-family: "DM Sans", sans-serif;
+          letter-spacing: 0.5px;
+          cursor: pointer;
+          transition: var(--transition);
         }
 
-        .search-btn:hover {
-          transform: translateY(-3px);
-          box-shadow: 0 15px 35px rgba(184, 145, 42, 0.3);
+        .plg-search-btn:hover {
+          background: var(--secondary-dark);
+          transform: translateY(-2px);
+          box-shadow: var(--shadow-md);
         }
 
-        .property-card {
+        /* ── BENTO GRID ── */
+        .plg-grid {
+          display: grid;
+          grid-template-columns: repeat(12, 1fr);
+          grid-auto-rows: 80px;
+          gap: 18px;
+        }
+
+        /* Size mappings → column / row spans */
+        .plg-col-hero   { grid-column: span 7; grid-row: span 7; }
+        .plg-col-tall   { grid-column: span 5; grid-row: span 7; }
+        .plg-col-wide   { grid-column: span 7; grid-row: span 4; }
+        .plg-col-medium { grid-column: span 5; grid-row: span 4; }
+        .plg-col-small  { grid-column: span 6; grid-row: span 3; }
+
+        /* ── CARD ── */
+        .plg-card {
           position: relative;
           overflow: hidden;
-          border-radius: 34px;
+          border-radius: var(--radius);
           cursor: pointer;
-          transition: 0.45s cubic-bezier(0.23, 1, 0.32, 1);
           isolation: isolate;
+          transition: var(--transition);
+          display: block;
+          text-decoration: none;
+          width: 100%;
+          height: 100%;
         }
 
-        .property-card:hover {
-          transform: translateY(-10px);
+        .plg-card:hover {
+          transform: translateY(-6px);
+          box-shadow: var(--shadow-md);
         }
 
-        .property-card img {
+        .plg-card img {
           width: 100%;
           height: 100%;
           object-fit: cover;
-          transition: 0.7s cubic-bezier(0.23, 1, 0.32, 1);
+          display: block;
+          transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
-        .property-card:hover img {
-          transform: scale(1.08);
+        .plg-card:hover img {
+          transform: scale(1.07);
         }
 
-        .card-overlay {
+        .plg-card-overlay {
           position: absolute;
           inset: 0;
           background: linear-gradient(
             to top,
-            rgba(8, 8, 8, 0.92) 0%,
-            rgba(8, 8, 8, 0.45) 40%,
-            rgba(8, 8, 8, 0.05) 100%
+            rgba(5, 5, 10, 0.88) 0%,
+            rgba(5, 5, 10, 0.4) 45%,
+            rgba(5, 5, 10, 0.05) 100%
           );
           z-index: 1;
         }
 
-        .glow {
+        /* blue tint shimmer on hover */
+        .plg-card-shimmer {
           position: absolute;
           inset: 0;
           background: radial-gradient(
             circle at bottom left,
-            rgba(184, 145, 42, 0.35),
-            transparent 45%
+            rgba(15, 61, 145, 0.3),
+            transparent 50%
           );
           opacity: 0;
-          transition: 0.4s;
+          transition: opacity 0.4s ease;
           z-index: 2;
         }
 
-        .property-card:hover .glow {
+        .plg-card:hover .plg-card-shimmer {
           opacity: 1;
         }
 
-        .badge-custom {
+        /* badge */
+        .plg-badge {
           position: absolute;
-          top: 24px;
-          left: 24px;
+          top: 18px;
+          left: 18px;
           z-index: 5;
-          background: rgba(184, 145, 42, 0.92);
-          color: white;
+          background: var(--primary);
+          color: var(--white);
           border-radius: 999px;
-          padding: 8px 15px;
+          padding: 6px 14px;
           font-size: 10px;
-          letter-spacing: 1.8px;
+          letter-spacing: 1.5px;
           text-transform: uppercase;
           font-weight: 700;
-          backdrop-filter: blur(10px);
+          font-family: "DM Sans", sans-serif;
         }
 
-        .card-content {
+        /* content */
+        .plg-card-content {
           position: absolute;
           left: 0;
           right: 0;
           bottom: 0;
           z-index: 5;
-          padding: 30px;
+          padding: 24px;
         }
 
-        .card-type {
-          color: #d7b048;
+        .plg-card-type {
+          color: var(--primary-light);
           font-size: 10px;
-          letter-spacing: 4px;
+          letter-spacing: 3px;
           font-weight: 700;
           text-transform: uppercase;
-          margin-bottom: 12px;
+          font-family: "DM Sans", sans-serif;
+          margin-bottom: 8px;
         }
 
-        .card-title {
-          color: white;
-          font-family: "Playfair Display", serif;
-          font-size: 38px;
-          line-height: 1.05;
-          margin-bottom: 14px;
+        .plg-card-title {
+          color: var(--white);
+          font-family: "DM Serif Display", serif;
+          font-size: 32px;
+          line-height: 1.1;
+          margin: 0 0 12px;
+          letter-spacing: -0.3px;
         }
 
-        .small-title {
-          font-size: 26px;
-        }
+        .plg-card-title.sm { font-size: 22px; }
+        .plg-card-title.md { font-size: 26px; }
 
-        .info-wrap {
+        .plg-info-row {
           display: flex;
           align-items: center;
           flex-wrap: wrap;
-          gap: 10px;
+          gap: 8px;
         }
 
-        .info-text {
+        .plg-info-text {
           color: rgba(255, 255, 255, 0.72);
-          font-size: 13px;
+          font-size: 12.5px;
           font-weight: 500;
+          font-family: "DM Sans", sans-serif;
         }
 
-        .dot {
-          width: 4px;
-          height: 4px;
+        .plg-dot {
+          width: 3px;
+          height: 3px;
           border-radius: 50%;
-          background: rgba(215, 176, 72, 0.6);
+          background: var(--primary-light);
+          opacity: 0.6;
         }
 
-        @media (max-width: 991px) {
-          .hero-title {
-            font-size: 58px;
-          }
+        /* ── RESPONSIVE ── */
+        @media (max-width: 1100px) {
+          .plg-hero-title { font-size: 56px; }
 
-          .hero-para {
-            max-width: 100%;
-            margin-left: 0;
-            margin-top: 24px;
-          }
+          .plg-col-hero   { grid-column: span 12; grid-row: span 5; }
+          .plg-col-tall   { grid-column: span 12; grid-row: span 5; }
+          .plg-col-wide   { grid-column: span 12; grid-row: span 4; }
+          .plg-col-medium { grid-column: span 12; grid-row: span 4; }
+          .plg-col-small  { grid-column: span 6;  grid-row: span 3; }
         }
 
         @media (max-width: 767px) {
-          .property-section {
-            padding: 60px 0;
-          }
+          .plg-section { padding: 56px 0; }
+          .plg-container { padding: 0 16px; }
+          .plg-hero-title { font-size: 38px; }
+          .plg-hero-para { max-width: 100%; margin-left: 0; margin-top: 20px; }
+          .plg-filter-box { padding: 18px; border-radius: var(--radius); }
+          .plg-grid { grid-auto-rows: 60px; gap: 12px; }
 
-          .property-container {
-            padding: 0 16px;
-          }
+          .plg-col-hero,
+          .plg-col-tall,
+          .plg-col-wide,
+          .plg-col-medium { grid-column: span 12; grid-row: span 5; }
+          .plg-col-small  { grid-column: span 12; grid-row: span 4; }
 
-          .hero-title {
-            font-size: 42px;
-          }
-
-          .filter-box {
-            padding: 22px;
-            border-radius: 26px;
-          }
-
-          .property-card {
-            height: 280px !important;
-          }
-
-          .card-content {
-            padding: 22px;
-          }
-
-          .card-title {
-            font-size: 28px !important;
-          }
+          .plg-card-title    { font-size: 24px !important; }
         }
       `}</style>
 
-      <section className="property-section">
-        <div className="property-container">
-          {/* HEADER */}
+      <section className="plg-section">
+        <div className="plg-container">
 
-          <div className="row align-items-end">
-            <div className="col-lg-8">
-              <div className="top-badge">
-                <div className="top-line"></div>
-                <span className="top-text">
-                  Premium Collection
-                </span>
+          {/* ── HEADER ── */}
+          <div className="row align-items-end mb-2">
+            <div className="col-lg-7">
+              <div className="plg-eyebrow">
+                <div className="plg-eyebrow-line" />
+                <span className="plg-eyebrow-text">Premium Collection</span>
               </div>
-
-              <h1 className="hero-title">
-                Property for Sale
-                <br />
-                <span>in Rajasthan</span>
+              <h1 className="plg-hero-title">
+                Property for Sale<br />
+                <em>in Rajasthan</em>
               </h1>
             </div>
-
-            <div className="col-lg-4">
-              <p className="hero-para">
-                Explore premium residences, commercial hubs &
-                ultra luxury villas crafted for modern lifestyle.
+            <div className="col-lg-5">
+              <p className="plg-hero-para">
+                Explore premium residences, commercial hubs &amp; ultra luxury
+                villas crafted for modern lifestyle.
               </p>
             </div>
           </div>
 
-          {/* FILTER */}
-
-          <div className="filter-box">
-            <div className="d-flex flex-wrap gap-2 mb-4">
+          {/* ── FILTER BOX ── */}
+          <div className="plg-filter-box">
+            <div className="d-flex flex-wrap gap-2 mb-3">
               {typeOptions.map((t) => (
                 <button
                   key={t}
                   onClick={() => setType(t)}
-                  className={`chip ${
-                    type === t ? "active" : ""
-                  }`}
+                  className={`plg-chip ${type === t ? "active" : ""}`}
                 >
                   {t}
                 </button>
@@ -449,9 +466,9 @@ export default function PropertyLocationGrid() {
 
             <div className="row g-3 align-items-center">
               <div className="col-lg-9">
-                <div className="search-wrap">
+                <div className="plg-search-wrap">
                   <svg
-                    className="search-icon"
+                    className="plg-search-icon"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -463,108 +480,66 @@ export default function PropertyLocationGrid() {
                       d="M21 21l-4.3-4.3m1.3-5.7a7 7 0 11-14 0 7 7 0 0114 0z"
                     />
                   </svg>
-
                   <input
                     type="text"
-                    className="search-input"
+                    className="plg-search-input"
                     placeholder="Search premium properties..."
                     value={search}
-                    onChange={(e) =>
-                      setSearch(e.target.value)
-                    }
+                    onChange={(e) => setSearch(e.target.value)}
                   />
                 </div>
               </div>
-
               <div className="col-lg-3">
-                <button className="search-btn">
-                  Search Property
-                </button>
+                <button className="plg-search-btn">Search Property</button>
               </div>
             </div>
           </div>
 
-          {/* GRID */}
+          {/* ── BENTO GRID ── */}
+          <div className="plg-grid">
+            {filtered.map((item) => {
+              const colClass =
+                item.size === "hero"   ? "plg-col-hero"   :
+                item.size === "tall"   ? "plg-col-tall"   :
+                item.size === "wide"   ? "plg-col-wide"   :
+                item.size === "medium" ? "plg-col-medium" :
+                                         "plg-col-small";
 
-          <div className="row g-4">
-            {filtered.map((item) => (
-              <div
-                key={item.id}
-                className={
-                  item.size === "hero"
-                    ? "col-lg-6"
-                    : item.size === "wide"
-                    ? "col-lg-6"
-                    : "col-lg-3 col-md-6"
-                }
-              >
-                <Link
-                  href="/Home/propertiesdetailspage"
-                  className="text-decoration-none"
-                >
-                  <div
-                    className="property-card"
-                    style={{
-                      height:
-                        item.size === "hero"
-                          ? "620px"
-                          : item.size === "tall"
-                          ? "620px"
-                          : item.size === "wide"
-                          ? "360px"
-                          : "300px",
-                    }}
-                  >
+              const titleSize =
+                item.size === "hero" || item.size === "tall"  ? ""   :
+                item.size === "wide" || item.size === "medium" ? "md" :
+                "sm";
+
+              return (
+                <div key={item.id} className={colClass}>
+                  <Link href="/Home/propertiesdetailspage" className="plg-card">
                     <img src={item.image} alt={item.title} />
-
-                    <div className="card-overlay"></div>
-
-                    <div className="glow"></div>
+                    <div className="plg-card-overlay" />
+                    <div className="plg-card-shimmer" />
 
                     {item.badge && (
-                      <div className="badge-custom">
-                        {item.badge}
-                      </div>
+                      <div className="plg-badge">{item.badge}</div>
                     )}
 
-                    <div className="card-content">
-                      <div className="card-type">
-                        {item.type}
-                      </div>
-
-                      <h3
-                        className={`card-title ${
-                          item.size === "small"
-                            ? "small-title"
-                            : ""
-                        }`}
-                      >
+                    <div className="plg-card-content">
+                      <div className="plg-card-type">{item.type}</div>
+                      <h3 className={`plg-card-title ${titleSize}`}>
                         {item.title}
                       </h3>
-
-                      <div className="info-wrap">
-                        <span className="info-text">
-                          {item.listings} listings
-                        </span>
-
-                        <span className="dot"></span>
-
-                        <span className="info-text">
-                          {item.price}
-                        </span>
-
-                        <span className="dot"></span>
-
-                        <span className="info-text">
-                          {item.beds} Beds
-                        </span>
+                      <div className="plg-info-row">
+                        <span className="plg-info-text">{item.listings} listings</span>
+                        <span className="plg-dot" />
+                        <span className="plg-info-text">{item.price}</span>
+                        <span className="plg-dot" />
+                        <span className="plg-info-text">{item.beds} Beds</span>
                       </div>
                     </div>
-                  </div>
-                </Link>
-              </div>
-            ))}
+                  </Link>
+                </div>
+              );
+            })}
           </div>
+
         </div>
       </section>
     </>

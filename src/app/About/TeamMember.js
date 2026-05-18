@@ -55,23 +55,27 @@ export default function TeamMembers() {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Syne:wght@400;500;700&display=swap');
+        @keyframes spin {
+          to { transform: rotate(360deg); }
+        }
 
-        /* ── Palette ──
-           bg:       #faf7f2  warm parchment
-           surface:  #ffffff
-           border:   rgba(0,0,0,0.07)
-           accent:   #c9963a  warm gold
-           text:     #1e1a17  warm near-black
-           muted:    #8c7b6e  warm taupe
-        */
+        @keyframes fadeUp {
+          from {
+            opacity: 0;
+            transform: translateY(18px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
 
         .team-section {
-          font-family: 'Syne', sans-serif;
-          background: #faf7f2;
+          background: var(--background);
           min-height: 100vh;
           position: relative;
           overflow: hidden;
+          font-family: var(--font-body);
         }
 
         .team-section::before {
@@ -81,7 +85,11 @@ export default function TeamMembers() {
           left: -5%;
           width: 480px;
           height: 480px;
-          background: radial-gradient(circle, rgba(201,150,58,0.10) 0%, transparent 70%);
+          background: radial-gradient(
+            circle,
+            rgba(245,158,11,0.10) 0%,
+            transparent 70%
+          );
           pointer-events: none;
         }
 
@@ -92,40 +100,44 @@ export default function TeamMembers() {
           right: -8%;
           width: 380px;
           height: 380px;
-          background: radial-gradient(circle, rgba(201,150,58,0.07) 0%, transparent 70%);
+          background: radial-gradient(
+            circle,
+            rgba(15,61,145,0.08) 0%,
+            transparent 70%
+          );
           pointer-events: none;
         }
 
         .eyebrow {
-          font-family: 'Syne', sans-serif;
-          font-size: 0.65rem;
-          letter-spacing: 0.3em;
+          font-size: 0.72rem;
+          letter-spacing: 0.32em;
           text-transform: uppercase;
-          color: #c9963a;
+          color: var(--primary);
+          font-weight: 600;
         }
 
         .section-title {
-          font-family: 'Cormorant Garamond', serif;
-          font-weight: 300;
+          font-family: var(--font-heading);
+          font-weight: 700;
           font-size: clamp(3rem, 6vw, 5rem);
           line-height: 1;
-          color: #1e1a17;
-          letter-spacing: -0.02em;
+          color: var(--text);
+          letter-spacing: -0.03em;
         }
 
         .section-title em {
           font-style: italic;
-          color: #c9963a;
+          color: var(--primary);
+          font-weight: 500;
         }
 
         .section-subtitle {
           margin-top: 1.2rem;
-          font-family: 'Cormorant Garamond', serif;
-          font-size: 1.1rem;
-          font-weight: 300;
-          color: #8c7b6e;
-          max-width: 420px;
-          line-height: 1.7;
+          font-size: 1rem;
+          font-weight: 400;
+          color: var(--text-light);
+          max-width: 460px;
+          line-height: 1.8;
         }
 
         .team-grid {
@@ -136,19 +148,22 @@ export default function TeamMembers() {
 
         .card {
           position: relative;
-          background: #ffffff;
-          border: 1px solid rgba(0,0,0,0.07);
-          border-radius: 20px;
+          background: rgba(255,255,255,0.85);
+          border: 1px solid var(--border);
+          border-radius: var(--radius);
           overflow: hidden;
           cursor: pointer;
-          transition: box-shadow 0.4s ease, transform 0.35s ease, border-color 0.35s ease;
-          box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+          backdrop-filter: blur(18px);
+          transition: var(--transition);
+          box-shadow: var(--shadow-sm);
         }
 
         .card.is-hovered {
-          transform: translateY(-5px);
-          box-shadow: 0 16px 48px rgba(201,150,58,0.16), 0 4px 16px rgba(0,0,0,0.06);
-          border-color: rgba(201,150,58,0.40);
+          transform: translateY(-6px);
+          border-color: rgba(245,158,11,0.35);
+          box-shadow:
+            0 20px 50px rgba(245,158,11,0.15),
+            var(--shadow-md);
         }
 
         .card-inner {
@@ -161,31 +176,35 @@ export default function TeamMembers() {
         }
 
         .card-number {
-          font-family: 'Cormorant Garamond', serif;
-          font-size: 0.8rem;
-          color: rgba(201,150,58,0.40);
+          font-family: var(--font-heading);
+          font-size: 0.9rem;
+          color: rgba(245,158,11,0.45);
           letter-spacing: 0.2em;
           margin-bottom: 1.4rem;
-          transition: color 0.3s ease;
+          transition: var(--transition);
         }
 
         .card.is-hovered .card-number {
-          color: #c9963a;
+          color: var(--primary);
         }
 
         .card-image-wrap {
           position: relative;
-          width: 76px;
-          height: 76px;
+          width: 78px;
+          height: 78px;
           margin-bottom: 1.4rem;
         }
 
         .card-image-wrap::before {
           content: '';
           position: absolute;
-          inset: -3px;
+          inset: -4px;
           border-radius: 50%;
-          background: conic-gradient(from 0deg, transparent 55%, rgba(201,150,58,0.70) 100%);
+          background: conic-gradient(
+            from 0deg,
+            transparent 55%,
+            var(--primary) 100%
+          );
           opacity: 0;
           transition: opacity 0.4s ease;
           animation: spin 4s linear infinite;
@@ -195,19 +214,15 @@ export default function TeamMembers() {
           opacity: 1;
         }
 
-        @keyframes spin {
-          to { transform: rotate(360deg); }
-        }
-
         .card-image {
-          width: 76px;
-          height: 76px;
+          width: 78px;
+          height: 78px;
           border-radius: 50%;
           object-fit: cover;
           position: relative;
           z-index: 1;
-          transition: transform 0.4s ease;
-          border: 2px solid rgba(0,0,0,0.07);
+          border: 2px solid var(--border);
+          transition: var(--transition);
         }
 
         .card.is-hovered .card-image {
@@ -215,50 +230,52 @@ export default function TeamMembers() {
         }
 
         .card-name {
-          font-family: 'Syne', sans-serif;
+          font-family: var(--font-heading);
           font-weight: 700;
-          font-size: 1.05rem;
-          color: #1e1a17;
+          font-size: 1.08rem;
+          color: var(--text);
           letter-spacing: -0.01em;
-          margin-bottom: 0.25rem;
+          margin-bottom: 0.3rem;
         }
 
         .card-role {
-          font-size: 0.68rem;
+          font-size: 0.72rem;
           letter-spacing: 0.18em;
           text-transform: uppercase;
-          color: #c9963a;
-          margin-bottom: 1.1rem;
-          font-weight: 500;
+          color: var(--primary);
+          margin-bottom: 1rem;
+          font-weight: 600;
         }
 
         .card-bio {
-          font-family: 'Cormorant Garamond', serif;
-          font-weight: 300;
-          font-size: 1rem;
-          line-height: 1.65;
-          color: #a0918a;
+          font-size: 0.96rem;
+          line-height: 1.75;
+          color: var(--text-light);
           flex: 1;
-          transition: color 0.3s ease;
+          transition: var(--transition);
         }
 
         .card.is-hovered .card-bio {
-          color: #7a6f68;
+          color: var(--text);
         }
 
         .card-footer {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          margin-top: 1.4rem;
+          margin-top: 1.5rem;
           padding-top: 1.1rem;
-          border-top: 1px solid rgba(0,0,0,0.06);
+          border-top: 1px solid var(--border);
         }
 
         .card-line {
           height: 1px;
           width: 0;
-          background: linear-gradient(90deg, #c9963a, transparent);
+          background: linear-gradient(
+            90deg,
+            var(--primary),
+            transparent
+          );
           transition: width 0.5s ease;
           flex: 1;
           margin-right: 1rem;
@@ -274,28 +291,28 @@ export default function TeamMembers() {
         }
 
         .social-btn {
-          width: 30px;
-          height: 30px;
+          width: 32px;
+          height: 32px;
           border-radius: 50%;
-          border: 1px solid rgba(0,0,0,0.09);
+          border: 1px solid var(--border);
           background: transparent;
-          color: #b0a59e;
+          color: var(--text-light);
           display: flex;
           align-items: center;
           justify-content: center;
           text-decoration: none;
-          transition: all 0.25s ease;
+          transition: var(--transition);
         }
 
         .card.is-hovered .social-btn {
-          border-color: rgba(201,150,58,0.50);
-          color: #c9963a;
-          background: rgba(201,150,58,0.07);
+          border-color: rgba(245,158,11,0.35);
+          color: var(--primary);
+          background: rgba(245,158,11,0.08);
         }
 
         .social-btn:hover {
-          background: rgba(201,150,58,0.15) !important;
-          transform: scale(1.12);
+          transform: scale(1.1);
+          background: rgba(245,158,11,0.15) !important;
         }
 
         .ambient-glow {
@@ -305,7 +322,11 @@ export default function TeamMembers() {
           width: 200px;
           height: 200px;
           border-radius: 50%;
-          background: radial-gradient(circle, rgba(201,150,58,0.12) 0%, transparent 70%);
+          background: radial-gradient(
+            circle,
+            rgba(245,158,11,0.15) 0%,
+            transparent 70%
+          );
           opacity: 0;
           pointer-events: none;
           transition: opacity 0.5s ease;
@@ -321,10 +342,6 @@ export default function TeamMembers() {
           animation: fadeUp 0.65s forwards;
         }
 
-        @keyframes fadeUp {
-          to { opacity: 1; transform: translateY(0); }
-        }
-
         .fade-in:nth-child(1) { animation-delay: 0.08s; }
         .fade-in:nth-child(2) { animation-delay: 0.18s; }
         .fade-in:nth-child(3) { animation-delay: 0.28s; }
@@ -337,16 +354,29 @@ export default function TeamMembers() {
       `}</style>
 
       <section className="team-section py-28 px-6">
-        <div style={{ maxWidth: "1100px", margin: "0 auto", position: "relative", zIndex: 1 }}>
-
+        <div
+          style={{
+            maxWidth: "1100px",
+            margin: "0 auto",
+            position: "relative",
+            zIndex: 1,
+          }}
+        >
           {/* Header */}
           <div className="heading-fade" style={{ marginBottom: "3.5rem" }}>
-            <p className="eyebrow" style={{ marginBottom: "1rem" }}>— The people</p>
+            <p className="eyebrow" style={{ marginBottom: "1rem" }}>
+              — The people
+            </p>
+
             <h2 className="section-title">
-              Built by <em>remarkable</em><br />humans
+              Built by <em>remarkable</em>
+              <br />
+              humans
             </h2>
+
             <p className="section-subtitle">
-              A small, dedicated team obsessed with craft, quality, and building things that matter.
+              A small, dedicated team obsessed with craft, quality, and
+              building things that matter.
             </p>
           </div>
 
@@ -355,11 +385,14 @@ export default function TeamMembers() {
             {team.map((member, i) => (
               <div
                 key={i}
-                className={`card fade-in ${hovered === i ? "is-hovered" : ""}`}
+                className={`card fade-in ${
+                  hovered === i ? "is-hovered" : ""
+                }`}
                 onMouseEnter={() => setHovered(i)}
                 onMouseLeave={() => setHovered(null)}
               >
                 <div className="ambient-glow" />
+
                 <div className="card-inner">
                   <div className="card-number">{member.number}</div>
 
@@ -372,16 +405,28 @@ export default function TeamMembers() {
                   </div>
 
                   <h3 className="card-name">{member.name}</h3>
+
                   <p className="card-role">{member.role}</p>
+
                   <p className="card-bio">{member.bio}</p>
 
                   <div className="card-footer">
                     <div className="card-line" />
+
                     <div className="social-links">
-                      <a href={member.socials.twitter} className="social-btn" aria-label="Twitter">
+                      <a
+                        href={member.socials.twitter}
+                        className="social-btn"
+                        aria-label="Twitter"
+                      >
                         <TwitterIcon />
                       </a>
-                      <a href={member.socials.linkedin} className="social-btn" aria-label="LinkedIn">
+
+                      <a
+                        href={member.socials.linkedin}
+                        className="social-btn"
+                        aria-label="LinkedIn"
+                      >
                         <LinkedInIcon />
                       </a>
                     </div>
@@ -392,20 +437,44 @@ export default function TeamMembers() {
           </div>
 
           {/* Bottom accent */}
-          <div style={{
-            marginTop: "3rem",
-            display: "flex",
-            alignItems: "center",
-            gap: "1rem",
-            opacity: 0.45
-          }}>
-            <div style={{ height: "1px", flex: 1, background: "rgba(0,0,0,0.1)" }} />
-            <span style={{ fontFamily: "'Syne', sans-serif", fontSize: "0.65rem", letterSpacing: "0.2em", color: "#c9963a", textTransform: "uppercase" }}>
+          <div
+            style={{
+              marginTop: "3rem",
+              display: "flex",
+              alignItems: "center",
+              gap: "1rem",
+              opacity: 0.55,
+            }}
+          >
+            <div
+              style={{
+                height: "1px",
+                flex: 1,
+                background: "var(--border)",
+              }}
+            />
+
+            <span
+              style={{
+                fontFamily: "var(--font-body)",
+                fontSize: "0.72rem",
+                letterSpacing: "0.2em",
+                color: "var(--primary)",
+                textTransform: "uppercase",
+                fontWeight: 600,
+              }}
+            >
               Est. 2024
             </span>
-            <div style={{ height: "1px", flex: 1, background: "rgba(0,0,0,0.1)" }} />
-          </div>
 
+            <div
+              style={{
+                height: "1px",
+                flex: 1,
+                background: "var(--border)",
+              }}
+            />
+          </div>
         </div>
       </section>
     </>

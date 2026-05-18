@@ -13,7 +13,7 @@ export default function Achievements() {
   const [counts, setCounts] = useState(statsData.map(() => 0));
 
   useEffect(() => {
-    const duration = 2500; // ⬅️ SLOWER ANIMATION (2.5s)
+    const duration = 2500;
     const frameRate = 30;
     const steps = duration / frameRate;
 
@@ -40,73 +40,199 @@ export default function Achievements() {
   }, []);
 
   return (
-    <section className="relative py-24 bg-[#fbfaf8] overflow-hidden">
-
-      {/* Fonts */}
+    <section className="achievements-section relative py-24 overflow-hidden">
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Jost:wght@300;400;500;600&display=swap');
-
-        .font-heading {
-          font-family: 'Cormorant Garamond', serif;
-        }
-
-        .font-body {
-          font-family: 'Jost', sans-serif;
-        }
-
         @keyframes fadeUp {
-          from { opacity: 0; transform: translateY(18px); }
-          to { opacity: 1; transform: translateY(0); }
+          from {
+            opacity: 0;
+            transform: translateY(18px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        .achievements-section {
+          background: var(--background);
+          font-family: var(--font-body);
         }
 
         .fade-up {
-          animation: fadeUp 0.9s ease forwards;
+          opacity: 0;
+          animation: fadeUp 0.8s ease forwards;
+        }
+
+        .stats-card {
+          position: relative;
+          overflow: hidden;
+          border-radius: calc(var(--radius) + 8px);
+          border: 1px solid var(--border);
+          background: rgba(255,255,255,0.82);
+          backdrop-filter: blur(18px);
+          padding: 2rem;
+          text-align: center;
+          box-shadow: var(--shadow-sm);
+          transition: var(--transition);
+        }
+
+        .stats-card:hover {
+          transform: translateY(-8px);
+          border-color: rgba(245,158,11,0.28);
+          box-shadow:
+            0 20px 50px rgba(245,158,11,0.14),
+            var(--shadow-md);
+        }
+
+        .stats-card::before {
+          content: "";
+          position: absolute;
+          top: -80px;
+          right: -80px;
+          width: 180px;
+          height: 180px;
+          border-radius: 999px;
+          background: radial-gradient(
+            circle,
+            rgba(245,158,11,0.16) 0%,
+            transparent 70%
+          );
+          opacity: 0;
+          transition: opacity 0.5s ease;
+        }
+
+        .stats-card:hover::before {
+          opacity: 1;
+        }
+
+        .stats-line {
+          width: 42px;
+          height: 2px;
+          margin: 1rem auto;
+          border-radius: 999px;
+          background: linear-gradient(
+            90deg,
+            var(--primary),
+            var(--primary-light)
+          );
+          transition: width 0.35s ease;
+        }
+
+        .stats-card:hover .stats-line {
+          width: 64px;
+        }
+
+        .stats-number {
+          font-family: var(--font-heading);
+          font-size: clamp(2.2rem, 4vw, 3.3rem);
+          font-weight: 700;
+          line-height: 1;
+          letter-spacing: -0.03em;
+          color: var(--text);
+        }
+
+        .stats-label {
+          color: var(--text-light);
+          font-size: 0.95rem;
+          line-height: 1.6;
+          font-weight: 500;
+        }
+
+        .section-title {
+          font-family: var(--font-heading);
+          font-size: clamp(2.8rem, 5vw, 4.6rem);
+          font-weight: 700;
+          line-height: 1;
+          letter-spacing: -0.03em;
+          color: var(--text);
+        }
+
+        .section-title span {
+          color: var(--primary);
+          font-style: italic;
+          font-weight: 500;
+        }
+
+        .section-subtitle {
+          color: var(--text-light);
+          font-size: 1rem;
+          margin-top: 1rem;
+          line-height: 1.8;
+        }
+
+        .badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 10px;
+          padding: 8px 18px;
+          border-radius: 999px;
+          border: 1px solid var(--border);
+          background: rgba(255,255,255,0.8);
+          backdrop-filter: blur(14px);
+          box-shadow: var(--shadow-sm);
+          margin-bottom: 1.5rem;
+        }
+
+        .badge-dot {
+          width: 8px;
+          height: 8px;
+          border-radius: 999px;
+          background: var(--primary);
+          box-shadow: 0 0 16px rgba(245,158,11,0.45);
+        }
+
+        .badge-text {
+          font-size: 0.72rem;
+          font-weight: 600;
+          letter-spacing: 0.24em;
+          text-transform: uppercase;
+          color: var(--primary);
         }
       `}</style>
 
-      {/* glow */}
-      <div className="absolute top-[-140px] left-1/2 -translate-x-1/2 w-[700px] h-[400px] bg-[#b88a44]/10 blur-[150px] rounded-full" />
+      {/* Ambient Glow */}
+      <div className="absolute top-[-140px] left-1/2 -translate-x-1/2 w-[700px] h-[400px] bg-[rgba(245,158,11,0.10)] blur-[150px] rounded-full" />
 
       <div className="relative max-w-6xl mx-auto px-6">
+        {/* Heading */}
+        <div className="text-center mb-16 fade-up">
+          <div className="badge mx-auto w-fit">
+            <span className="badge-dot" />
+            <span className="badge-text">Our Success</span>
+          </div>
 
-        {/* heading */}
-        <div className="text-center mb-16">
-          <h2 className="font-heading text-4xl md:text-5xl font-semibold text-black">
-            Our Achievements
+          <h2 className="section-title">
+            Our <span>Achievements</span>
           </h2>
 
-          <p className="font-body mt-3 text-gray-500">
-            Built with trust, luxury & long-term value
+          <p className="section-subtitle">
+            Built with trust, luxury, innovation & long-term value
           </p>
         </div>
 
-        {/* stats */}
+        {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-
           {statsData.map((item, i) => (
             <div
               key={i}
-              className="relative bg-white border border-black/5 rounded-3xl p-8 text-center shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-500 fade-up"
-              style={{ animationDelay: `${i * 150}ms` }}
+              className="stats-card fade-up"
+              style={{
+                animationDelay: `${i * 140}ms`,
+              }}
             >
-
-              {/* NUMBER */}
-              <h3 className="font-heading text-3xl md:text-4xl font-semibold text-black">
+              {/* Number */}
+              <h3 className="stats-number">
                 {Math.floor(counts[i])}
                 {item.suffix}
               </h3>
 
-              {/* line */}
-              <div className="w-10 h-[2px] bg-[#b88a44] mx-auto my-4 transition-all duration-300 group-hover:w-14" />
+              {/* Line */}
+              <div className="stats-line" />
 
-              {/* label */}
-              <p className="font-body text-gray-500 text-sm md:text-base">
-                {item.label}
-              </p>
-
+              {/* Label */}
+              <p className="stats-label">{item.label}</p>
             </div>
           ))}
-
         </div>
       </div>
     </section>
